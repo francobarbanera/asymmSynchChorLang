@@ -1,0 +1,83 @@
+\newcommand{\prefixC}[1]{pc(#1)}
+
+\newcommand{\size}[1]{|#1|}
+
+\newcommand{\inp}[1]{\mathsf{src}(#1)}
+\newcommand{\out}[1]{\mathsf{out}(#1)}
+\newcommand{\lab}[1]{\mathsf{lab}(#1)}
+
+\newcommand{\pn}[1]{\mathsf{pn}(#1)}
+
+\def \bfr {\begin{color}{blue}} 
+\def \efr {\end{color}}
+
+\def \beM {\begin{color}{orange}} 
+\def \eeM {\end{color}}
+
+\newcommand{\il}[1]{\begin{color}{OliveGreen}#1\end{color}}  
+\newcommand{\restrict}[2]{
+  \protect\ifempty{#1}{\_}{
+	 \protect\StrCount{#1,}{,}[\l]
+	 \protect\ifthenelse{\l = 1}{
+		#1
+	 }{
+		\left(\protect\dolist{\cat}{#1}\right)
+	 }
+  }{\left|_{#2}\!\right.}
+}
+\renewcommand{\epsilon}{\varepsilon}
+
+% Petri nets
+
+\newcommand{\Nat}{\mathbb{N}}
+\newcommand{\teff}{\mathit{eff}}
+\newcommand{\eff}[1]{\mathit{eff}_{#1}}
+\newcommand{\en}[1]{\mathit{en}_{#1}}
+\newcommand{\ex}[1]{\mathit{ex}_{#1}}
+
+\newcommand{\BRA}[2]{\mathsf{BRA}^{#1\centerdot#2}}
+\newcommand{\PAR}[2]{\mathsf{PAR}^{#1\centerdot#2}}
+\newcommand{\BRAset}{\mathsf{BRA}}
+\newcommand{\PARset}{\mathsf{PAR}}
+\newcommand{\INTset}{\mathsf{INT}}
+\newcommand{\MPX}[2]{\mathsf{MPX}^{#1\centerdot#2}}
+\newcommand{\DMPX}[2]{\mathsf{DMPX}^{#1\centerdot#2}}
+
+\newcommand{\rel}{{\mathcal R}}
+
+% Choreography automata
+
+\newcommand{\WW}{{\bigwedge\!\!\!\!\bigwedge}}
+
+\newcommand{\Dual}[1]{\overline{#1}}
+
+\newcommand{\chora}[1][A]{\mathbb{C}\mathrm{#1}}
+\newcommand{\sync}[3]{#1^{\ptp[#2] \bowtie \ptp[#3]}}
+\newcommand{\syncg}[3]{#1^{\ptp[#2] \asymp \ptp[#3]}}
+\newcommand{\compose}[4]{#1\,\!_{\ptp[#3] \bowtie \ptp[#4]}\! #2}
+\newcommand{\restr}[2]{{{#1}_{\mid{#2}}}}
+\newcommand{\proj}[2]{#1\!\downarrow_{{\ptp[#2]}}}
+\newcommand{\proji}[4]{{#1}\!\downarrow_{{\ptp[#2]}}^{{\ptp[#3]} \bowtie {\ptp[#4]}}}
+\newcommand{\arro}[1]{\xrightarrow{#1}}
+\newcommand{\lang}[1]{L(#1)}
+% \newcommand{\ssem}[1]{{\llbracket #1 \rrbracket^\mathsf{s}}}
+\newcommand{\ssem}[1]{{\llbracket #1 \rrbracket^{\textit{sym}}}}
+\newcommand{\asem}[1]{{\llbracket #1 \rrbracket}^{\textit{asym}}}
+\newcommand{\cclose}[1]{\text{cclose}( #1 )}
+\newcommand{\comm}{\sim}
+\newcommand{\aclose}[1]{close_a( #1 )}
+\newcommand{\acomm}{\sim_a}
+\newcommand{\pstate}[2]{\vec{#1}(#2)}
+
+\newcommand{\conng}[4]{{#1\!}^{\ptp[#3] \asymp \ptp[#4]}{\!#2}}
+\newcommand{\shufflem}{\stackrel{m}{\shuffle}}
+%\newcommand{\lproj}[2]{{#1}_{|_{#2}}}
+\newcommand{\lproj}[2]{\restrict{{#1}}{{\clang_{#2}}}}
+\newcommand{\maxp}[2]{\mathsf{mfm}^{\iH,\iK}({#1},{#2})}
+\newcommand{\io}[1]{\mathsf{io}({#1})}
+\newcommand{\conngm}[4]{{#1\!}^{\ptp[#3] \stackrel{\text{m}}{\asymp} \ptp[#4]}{\!#2}}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:

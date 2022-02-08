@@ -1,0 +1,802 @@
+ \newcommand{\shuffle}{\,{{\sqcup}\hspace{-1.5pt}{\sqcup}}\,}
+ \newcommand{\slang}{\mathtt{L}}
+ \newcommand{\filter}[2]{#1_{\mid #2}}
+\mkfun{\ssplit}{split}{}
+\mkfun{\join}{join}{}
+\mkfun{\subject}{subj}{}
+\mkfun{\ssynch}{ss}{}
+\mkfun{\dsynch}{ds}{}
+\mkfun{\psynch}{ps}{}
+\newcommand{\gasem}[1]{\asem{#1}_{\mathbf{G}}}
+
+
+
+
+We briefly recall a few notions used through the paper.
+%
+The sets of finite and infinite words on a given alphabet $\Sigma$ are,
+respectively, denoted by $\Sigma^\star$ and $\Sigma^\omega$ (recall
+that an infinite word, aka $\omega$-word~\cite{Staiger97}, on $\Sigma$
+is a map from natural numbers to $\Sigma$).
+%
+Let $\_\cat\_$ be the concatenation operator on words and $\epsilon$
+its neutral element.
+%
+We write $a_0 \cat a_1 \cat a_2 \cat \ldots$ for the word mapping $i$
+to $a_i \in \Sigma$ for all natural numbers $i$.
+%
+A language $L$ on $\Sigma$ is a subset of $\Sigma^\infty$ where
+$\Sigma^\infty = \Sigma^\star \cup \Sigma^\omega$.  The prefix-closure
+of $L \subseteq \Sigma^\infty$ is
+$\pref[L] = \Set{\aword \in \Sigma^\infty \sst \exists \aword' \in L
+  \qst \aword \preceq \aword'}$, where $\preceq$ is the prefix
+relation.
+%
+As usual we shall write $\aword\prec\aword'$ whenever
+$\aword\preceq\aword'$ and $\aword\neq\aword'$.
+%
+Recall that $L \subseteq \Sigma^\infty$ is \emph{prefix-closed} if
+$L = \pref[L]$.
+%
+A word $\aword$ is \emph{maximal} in a language
+$L \subseteq \Sigma^\infty$ if whenever $\aword \preceq \aword'$ for
+$\aword' \in L$ then $\aword' = \aword$.
+
+We shall deal with languages on particular alphabets, namely the
+alphabets of \emph{interactions} $\alfint$ and of \emph{actions}
+$\alfact$, defined as follows\footnote{These sets may be infinite;
+  formal languages over infinite alphabets have been studied, e.g.,
+  in~\cite{ajb80}.}
+%
+%\footnote{Following customary notation, given
+%  an alphabet $\Sigma$, $\Sigma^\star$ and $\Sigma^\omega$
+%  respectively denote the set of finite and infinite words on
+%  $\Sigma$; let $\Sigma^\infty = \Sigma^\star \cup \Sigma^\omega$ be
+%  the $\omega$-words on $\Sigma$.
+%  %
+%  Also, $\prec$ is the prefix relation on words and
+%  $\pref[L] = \Set{w \in \Sigma^\infty \sst \exists w' \in L \qst w
+%	 \prec w'}$ is the prefix-closure of language $L \subseteq \Sigma^\infty$.
+%  %
+%  Recall that $L \subseteq \Sigma^\infty$ is \emph{prefix-closed} if
+%  $L = \pref[L]$.
+%  %
+%} 
+\begin{align*}
+  \alfint & = \Set{\gint[] \sst \p \neq \q \in \mathfrak{P}, \msg \in \mathfrak{M}}
+  & & \text{ranged over by $\aint, \aint[b], \ldots$}
+  \\
+  \alfact & = \Set{\aout, \ain \sst \ptp[A] \neq \ptp[B] \in \mathfrak{P}, \msg \in \mathfrak{M}}
+  & & \text{ranged over by $\aact, \aact[b], \ldots$}
+\end{align*}
+%
+where $\mathfrak{P}$ is a fixed set of \emph{participants} (or
+\emph{roles}, ranged over by $\p$, $\ptp[B]$, etc.) and $\mathfrak{M}$
+is a fixed set of \emph{messages} (ranged over by $\msg$, $\msg[x]$,
+etc.); we take $\mathfrak{P}$ and $\mathfrak{M}$ disjoint.
+%
+Let $\msgof[\gint] = \msgof[\aout] = \msgof[\ain] = \msg$ and
+% , $\sndint[\aint]$ its \emph{sender} \p, and $\rcvint[\aint]$ its \emph{receiver} \q; we set
+$\ptpof[\gint] = \ptpof[\aout] = \ptpof[\ain] = \Set{\p,\q}$.
+%
+These functions extend homomorphically to (sets of) words.
+%
+The \emph{subject} of $\aout$ is the sender \p\ and the subject of
+$\ain$ is the receiver \q.
+%
+Words on $\alfint^\infty$ (ranged over by $\acword,\acword',...$) are
+called \emph{interaction words} while those on $\alfact^\infty$
+(ranged over by $\aaword,\aaword',...$) are called \emph{words of
+  actions}.
+%
+We let $\aword,\aword',...$ range over
+$\alfint^\infty \cup \alfact^\infty$ and use $\clang$ and $\alang$ to
+range over subsets of, respectively, $\alfint^\infty$ and
+$\alfact^\infty$.
+
+A \emph{global language} specifies the expected interactions of a
+system while a \emph{local language} specifies the communication
+behaviour of participants.
+
+\begin{definition}[Global language]\label{def:chorlang}
+  A \emph{global language} (\emph{g-language} for short) is a
+  prefix-closed language $\clang$ on $\alfint^\infty$ such that
+  $\ptpof[\clang]$ is finite.
+\end{definition}
+
+\begin{definition}[Local language]\label{def:actlang}
+  A \emph{local language} (\emph{l-language} for short) is a
+  prefix-closed language $\alang$ on $\alfact$ such that 
+  $\ptpof[\alang]$ is finite.
+  %
+  An l-language is \emph{$\p$-local} if its words have all actions
+  with subject \p.
+\end{definition}
+
+%
+As discussed in \cref{sec:intro}, l-languages give rise to
+\emph{communicating systems}.
+\begin{definition}[Communicating system]\label{def:commSyst}
+  Let $\ptpset \subseteq \mathfrak{P}$ be a finite set of
+  participants.
+  %
+  A \emph{(communicating) system over $\ptpset$} is a map
+  $\aCS = (\alang_{\p})_{\p \in \ptpset}$ assigning an $\p$-local
+  language $\alang_{\p}\neq \Set{\epsilon}$ such that
+  $\ptpof[\alang_{\p}] \subseteq \ptpset$ to each participant
+  $\p \in \ptpset$.
+\end{definition}
+
+
+
+By projecting a g-language $\clang$ on a participant $\p$ we obtain
+the $\p$-local language describing the sequence of actions performed
+by $\p$ in the interactions involving $\p$ in the words of $\clang$.
+\begin{definition}[Projection]\label{def:projection}
+  The \emph{projection on \p} of an interaction $\gint[][B][@][C]$
+  is computed by the function
+  $\proj{\_}{\_} : \alfint \times \mathfrak{P} \to \alfact \cup \Set{\epsilon}$ defined by:
+  \[
+	 \proj{(\gint[])}{A} = \aout \qquad\qquad \proj{(\gint[])}{B} =
+	 \ain \qquad\qquad \proj{(\gint[])}{c} = \epsilon
+  \]
+  %
+  and extended homomorphically to interaction words and g-languages.
+  %
+  The \emph{projection of a g-language $\clang$}, written
+  $\proj{\clang}{}$, is the communicating system
+  $(\proj{\clang}{\p})_{\p \in \ptpof[\clang]}$.
+\end{definition}
+\cref{def:projection} recasts in our setting the notion of projection
+used, e.g., in~\cite{CarboneHY12,honda16jacm}.
+
+
+
+\begin{example}\label{ex:simple}\hfill\\
+  Let
+  $\clang = \Set{\emptyword,\, \gint[][A][m][D],\,\gint[][A][m][D]\cat\gint[][C][m][B],\, 
+                                               \gint[][A][m][B],\, 
+                                               \gint[][C][m][B],\,
+                                               \gint[][C][m][B]\cat\gint[][A][m][D]}$
+
+  $\proj{\clang}{} = (\proj{\clang}{X})_{\ptp[X] \in
+	 \Set{\p,\q,\ptp[c],\ptp[d]}}$ where\\
+  $\proj{\clang}{A} = \Set{\varepsilon,\, \aout[A][D],\, \aout[A][B]}$,\\
+  $\proj{\clang}{B} = \Set{\varepsilon,\, \ain[C][B]}$, \\
+  $\proj{\clang}{C} = \Set{\varepsilon,\, \aout[C][B]}$, and\\
+  $\proj{\clang}{D} = \Set{\varepsilon,\, \ain[A][D]}$.
+  \finex
+\end{example}
+
+\begin{definition}[Split and Join]\label{def:decomp}
+\begin{enumerate}[i)]
+\item
+  The \emph{splitting} operation
+  $\ssplit[\_]: \alfint^\infty \to \alfact^\infty$ 
+  is the homomorphic extension on words and sets of words of the following function on interactions. 
+  \[
+	 \ssplit[\gint] = \aout\cat\ain
+  \]
+  \item
+  The \emph{joining} operation on strict synchronous words of actions 
+  is the homomorphic extension on words and sets of words of the following function on interactions. 
+  \[
+	 \join[\aout\cat\ain] = \gint
+  \]
+  \end{enumerate}
+\end{definition}
+
+We define an operation filtering out in an word of action those actions  having a given subject
+
+\begin{definition}[Filtering]\label{def:decomp}
+  The \emph{filtering} operation
+  $\filter{\_}{\_}: \alfact^\infty \times \mathfrak{P} \to
+  \alfint^\infty$ is the homomorphic extension on words of the following function on actions. 
+  \[
+	 \filter{\aact}{\p} =
+	 \begin{cases}
+		\aact &  \text{if } \p \text{ is the subject of } \aact
+		\\
+		\emptyword &  \text{otherwise}
+	 \end{cases}
+  \]
+\end{definition}
+
+\begin{fact}
+\label{fac:joinsplit}
+Let $\clang$ be a c-language, $\acword\in\clang$, $\aCS$ a communicating system on $\ptpset$, $\px\in\ptpset$, and let $z\in\alfact^\infty$ such that $\ssynch[z]$
+\begin{enumerate}[i)]
+%\item
+%$\join[{\ssplit[{\acword}]}] = \acword$
+%\item
+%$\ssplit[{\join[{z}]}] = z$
+\item
+$\filter{{\ssplit[{\acword}]}}{\px} = \proj{\acword}{X}$
+\item
+\label{fac:joinsplit-feqp}
+$\proj{\join[z]}{X} = \filter{z}{\px}$. 
+
+\end{enumerate}
+\end{fact}
+
+
+
+\subsection{Symmetric synchronous semantics}
+
+We consider a \emph{synchronous} semantics of
+communicating systems, similarly to other choreographic approaches
+such as~\cite{BravettiZ07,CarboneHY12,Dezani-Ciancaglini16,SeveriD19}.
+
+\begin{definition}[Symmetric synchronous Semantics]\label{def:syncSem}
+  Given a system $\aCS$ on $\ptpset$, the set
+  \[
+	 \ssem{\aCS} = \Set{\acword \in \alfint^\infty \sst  \ptpof[\acword] \subseteq \ptpset \ \land\ \forall \p \in
+		\ptpset \qst \ \proj{\acword}{\p} \in \aCS(\p)}
+  \]
+  is the \emph{{\bf symmetric} (synchronous) semantics} of $\aCS$;
+\end{definition}
+
+\subsection{Asymmetric synchronous semantics}
+
+In the asymmetric case we can look at the syncronous communication of the message $\msg$
+from $\p$ to $\q$ as composed by the choice of $\aout$ among the possible outputs and the
+handshaking communication resulting in the reception of the message by $\q$ ($\ain$).
+In the system several different actions performed by participants other that $\p$ and $\q$
+can occur in between $\aout$ and $\ain$. The most general asymmetric semantics take into account
+such a possibility. 
+ 
+
+\begin{definition}[Deferred synchronous words]
+Let $z\in\alfact^{\infty}$. We say $z$ to be a {\em deferred synchronous word} ($\dsynch[z]$) whenever both the following conditions hold
+\begin{enumerate}[a)]
+\item 
+for each action $\aout$ in $z$, the first action after it of the form $\p\,\_!\_$ or  $\_\,\p?\_$ (if any) is $\ain$;
+\item
+for each action $\ain$ in $z$, the first action preceding it of the form $\p\,\_!\_$ or  $\_\,\p?\_$ is $\aout$, and it is always the case.
+\end{enumerate}
+\end{definition}
+
+
+for each word w in the general semantics there is another word w' in the general semantics
+such that w' is synchronous.
+So we consider now a semantics modulo equivalence of words like w and w'.
+
+We define a relation on deferred synchronous words 
+$z\comm z'$ iff $\forall \px. \filter{z}{\px}=\filter{z}{\px}$
+
+[dare un nome differente a $\comm$ rispetto a chorlang]
+
+\begin{definition}[General asymmetric synchronous semantics]
+ \[
+	 \gasem{\aCS} = \Set{z \in \alfact^\infty \sst \dsynch[z] \land\ptpof[z] \subseteq \ptpset \ \land\ \forall \p \in
+		\ptpset \qst \filter{z}{\p} \in \aCS(\p)  }
+  \]
+  is the \emph{{\bf general asymmetric} (synchronous) semantics} of $\aCS$;
+\end{definition}
+
+
+
+\begin{definition}[(prefix/strict) synchronous words]
+% We say that $\aact[a]\cat\aact[b]\in\alfact^2$ is a split-pair of action
+%  whenever $\aact[a]=\aout$ implies $\ain$.
+%  
+  A word of actions $z\in\alfint^{\infty}$ is 
+  \begin{enumerate}[i)]
+  \item
+  {\em strictly synchronous} $(\ssynch[z])$ whenever
+   $z=\ssplit[w]$ for some $\acword\in\alfint^\infty$.
+  \item
+  {\em prefix synchronous} $(\psynch[z])$ whenever
+  \begin{description} 
+  \item
+  If $z\in\alfint^{*}$ then $z=z'\cat o$ where $\ssynch[z']$ and $o$ is a word of output actions;
+  \item
+  If $z\in\alfint^{\omega}$ then there exists a finite word $o$ of output actions  such that 
+  $\ssynch[{z\setminus o}]$
+  \end{description}
+\end{enumerate}
+  $\slang\subseteq \alfint^{\infty}$  is a \emph{strictly ({\text{resp.} prefix) synchronous} language
+  of actions} (\emph{ss-(ps-)language} for short) whenever each word in $\slang$ is strictly (resp. prefix) synchronous.
+  \end{definition}
+  
+  
+\begin{lemma}
+Let be $\aCS$ a communicating system.
+\begin{enumerate}[i)]
+\item
+Given $z\in \gasem{\aCS}$, there exists $z'\comm z$ such that $\psynch[z']$ and $z'\in \gasem{\aCS}$.
+\item
+$\gasem{\aCS}$ is $\comm$-closed.
+\end{enumerate}
+\end{lemma}
+
+  
+  
+%\begin{definition}
+%  A s-language $\slang$ is 
+% {\em symmetric} whenever \\
+% \centerline{each maximal $z=\aact[a]_0\cat\ldots\cat\aact[a]_n\in\slang\cap\alfact^*$  is such that  $\aact[a]_n$ is an output;}
+%  $\slang$ is called {\em asymmetric} otherwise.
+%\end{definition}
+ 
+
+\begin{definition}[Asymmetric synchronous Semantics]\label{def:syncSem}
+  Given a system $\aCS$ on $\ptpset$, the set
+  \[
+	 \asem{\aCS} = \Set{z \in \alfact^\infty \sst \ptpof[z] \subseteq \ptpset \ \land\ \psynch[z]\  \land\ \forall \p \in
+		\ptpset \qst \filter{z}{\p} \in \aCS(\p)  }
+  \]
+  is the \emph{{\bf asymmetric} (synchronous) semantics} of $\aCS$;
+  
+%  
+%  Given a system $\aCS = (\alang_{\p})_{\p \in \ptpset}$, 
+%  \[
+%	 \ssem{\aCS} = \Set{z \in \alfact^\infty \sst  \ptpof[\acword] \subseteq \ptpset \ \land\ 
+%	                                 z\in\shuffle_{\px \in \ptpset}\aCS(\px)    \ \land\ 
+%	                                 z \text{ is symmetric syncronous} } 
+%  \]
+%  is the \emph{symmetric (synchronous) semantics} of $\aCS$.
+%    \[
+%	 \asem{\aCS} = \Set{z \in \alfact^\infty \sst  \ptpof[\acword] \subseteq \ptpset \ \land\ 
+%	                                 z\in\shuffle_{\px \in \ptpset}\aCS(\px)     \ \land\ 
+%	                                 z \text{ is asymmetric syncronous} } 
+%  \]
+%  is the \emph{asymmetric (synchronous) semantics} of $\aCS$.
+%  
+\end{definition}
+
+[say that the two semantics are a g- and an s-language, that is they are prefix-closed]
+
+\begin{lemma}
+\label{fac:asymmsubsymm}
+Let  $\aCS$ be a communicating system on $\ptpset$.
+\begin{enumerate}[i)]
+\item
+$\ssem{\aCS} =  
+\Set{\acword \in \alfint^\infty \sst  
+\ptpof[\acword] \subseteq \ptpset \ \land\ \forall \p \in \ptpset \qst \filter{\ssplit[\acword]}{\p} \in \aCS(\p)}$.
+\item
+\label{fac:asymmsubsymm-aimps}
+$z\in\asem{\aCS}$ and $\ssynch[z]$ implies $\join[z]\in\ssem{\aCS}$.
+\item
+\label{fac:asymmsubsymm-asubs}
+$\pref[{\ssplit[{\ssem{\aCS}}]}] \subseteq \asem{\aCS}$.
+\end{enumerate}
+\end{lemma}
+
+\begin{example}
+\label{ex:simple2}
+The two semantics are non equivalent in general.
+Let us consider $\aCS = ({\alang}_{\px})_{\ptp[X] \in \Set{\p,\q}}$ where\\
+\centerline{$\alang_{\p}= \Set{\aout[A][B][][m], \aout[A][B][][y]}$ \qquad $\alang_{\p}= \Set{\ain[A][B][][m]}$ }
+is clearly lock-free with the symmetric semantics and non lock-free with the asymmetric one.
+
+ Even in case we restrict to systems
+obtained by projecting CUI c-languages the two semantics can differ.
+Let us consider the g-language $\clang$ in \cref{ex:simple}.
+$\clang$ is CUI, hence we have 
+  $$\ssem{\proj{\clang}{}} = \clang$$ 
+whereas 
+  $$\asem{\proj{\clang}{}} = \ssplit[\clang] \cup \pref[\Set{\aout[A][B][][m]\cat\ain[A][B][][m]\cat\aout[C][B][][m]}]$$
+\finex
+\end{example} 
+
+\begin{definition}[Asymmetrically-synchronous correctness and completeness]\label{def:cc}
+  Let $\aCS$ be a communicating system and $\clang$ a g-language.\\
+  $\aCS$ is \emph{a-synch correct (resp. complete) with respect to
+    $\clang$} if $\join[{\asem{\aCS}}]\subseteq \clang$ (resp. 
+  $\join[{\asem{\aCS}}]\supseteq \clang$).
+\end{definition}
+
+
+\begin{definition}[CUIasym]
+\label{def:cuiasym}
+A c-language $\clang$ on $\ptpset$ is CUIasym ($\cuuiasym[\clang]$) whenever,
+ for each $\p,\q\in\ptpset$ and $\acword, \acword_1, \acword_2\in\clang$, the following holds:\\
+ \centerline{$\proj{\acword}{A} = \proj{\acword_1}{A}\ \land\  \proj{\acword}{B} = \proj{\acword_2}{B}\ \land\  \acword_1\cat\gint\in\clang\ \implies\ \acword_2\cat\gint\in\clang$}
+\end{definition}
+
+\begin{proposition}
+Let $\clang$ be a CUI c-language.\\
+\centerline{$\cuuiasym[{\clang}]\ \implies\ \cuui[\clang]$}
+\end{proposition}
+\begin{proof}
+Let us assume $\cuuiasym[{\clang}]$ to hold. In order to show  $\cuui[{\clang}]$, 
+by definition let us consider $\acword_1,\acword_2,\acword\in\clang$, $\p,\q,\msg$ such that
+$$\proj{\acword}{A} =\proj{\acword_1}{A}\quad \proj{\acword}{B} =\proj{\acword_1}{B}
+\quad \acword_1\cat\gint, \acword_2\cat\gint\in\clang$$
+From $\proj{\acword}{A} =\proj{\acword_1}{A}$ and $\acword_1\cat\gint\in\clang$,
+by $\cuuiasym[{\clang}]$ we immediately get  $\acword\cat\gint\in\clang$, that is what we needed to
+prove $\cuui[\clang]$.
+\qed
+\end{proof}
+
+
+\begin{proposition} Let $\clang$ be a CUI c-language.
+$$
+\cuuiasym[\clang] \quad \text{iff}\quad \asem{\proj{\clang}{}} =  \pref[{\ssplit[\ssem{\proj{\clang}{}}]}]\quad (=
+ \pref[{\ssplit[\clang]}] \text{ by } \cuui)
+$$
+\end{proposition}
+\begin{proof}
+($\Leftarrow$).
+By contraposition, let us assume $\cuuiasym[\clang]$ not to hold. In that case, by \cref{def:cuiasym},
+since we have $\cuui[\clang]$, it has to be the case that
+there exists $\p,\q\in\ptpset$ and $\acword, \acword_1\in\clang$ such that
+ $$
+ \proj{\acword}{A} = \proj{\acword_1}{A}\ \land\  \acword_1\cat\gint\in\clang\ \land\ \acword\cat\gint\not\in\clang
+ $$
+ This necessarily implies $\acword_1\neq\acword$.
+We have now that
+ $\proj{(\acword_1\cat\gint)}{A}\in{\proj{\clang}{A}}$.
+ So, using  \cref{fac:asymmsubsymm} and the above,
+ $\proj{(\acword_1\cat\gint)}{A}
+= \proj{\acword_1}{A}\cat\aout[A][B][][m]
+= \proj{\acword}{A}\cat\aout[A][B][][m]
+ = \filter{(\ssplit[{\acword}])}{\p}\cat\aout[A][B][][m]
+ = \filter{(\ssplit[{\acword}]\cat\aout[A][B][][m])}{\p}
+ \in{\proj{\clang}{A}}$.
+ Now, since, for each $\px\neq\p$ we have $\proj{({\acword})}{\px}=\filter{(\ssplit[{\acword}])}{\px}$,
+ by definition of $\asem{\proj{\clang}{}}$ we get 
+ $$\ssplit[{\acword}]\cat\aout[A][B][][m]\in\asem{\proj{\clang}{}}.$$
+ In order to get the thesis it is then enough to show that 
+ $$\ssplit[{\acword}]\cat\aout[A][B][][m] \not\in\pref[{\ssplit[\ssem{\proj{\clang}{}}]}].$$ 
+ This means that we have to show that for no $u\in\alfact^\infty$ such that
+ $\ssynch[{\ssplit[{\acword}]\cat\aout[A][B][][m]\cat u}]$
+ we have $\join[{\ssplit[{\acword}]\cat\aout[A][B][][m]\cat u}]\in\ssem{\proj{\clang}{}}$. 
+ If there were such an $u$, it should have necessarily the form $\ain[A][B][][m]\cat u'$.
+ This, by prefix closure of $\ssem{\proj{\clang}{}}$ (=$\clang$), would imply
+$\join[{\ssplit[{\acword}]\cat\aout[A][B][][m]\cat \ain[A][B][][m]}]\in\ssem{\proj{\clang}{}}$,
+that is $\acword\cat\gint\in\ssem{\proj{\clang}{}}$ and hence, by $\cuui$,
+$\acword\cat\gint\in{{\clang}}$, contradicting our hypothesis.\\
+%
+ ($\Rightarrow$).
+ We assume $\cuuiasym$. Now, to show the thesis by contradiction, we assume 
+ \begin{equation}
+ \label{eq:aneqs}
+ \asem{\proj{\clang}{}} \neq  \pref[{\ssplit[\ssem{\proj{\clang}{}}]}].
+ \end{equation}
+ Since, by \ref{fac:asymmsubsymm-asubs}(\ref{fac:asymmsubsymm}),
+ $\pref[{\ssplit[{\ssem{\proj{\clang}{}}}]}] \subseteq \asem{\proj{\clang}{}}$
+ we have that  (\ref{eq:aneqs}) holds in case there exists $\hat z \in\alfact^*$ such that
+ \begin{equation}
+ \label{eq:negass}
+ \ssynch[\hat z]\ \land\ \exists \p,\q,\msg[m].\  \hat z\cat\aout \in \asem{\proj{\clang}{}} \land\  \join[{\hat z\cat\aout\cat\ain}]\not\in\ssem{\proj{\clang}{}}
+ \end{equation}
+ By definition of $\asem{\proj{\clang}{}}$, 
+for each $\px\in\ptpof[\hat z\cat\aout]$  there is a $z_{\px}\in\proj{\clang}{X}\cap\alfact^*$ such that
+$\filter{(\hat z\cat\aout)}{\px}=z_{\px}$. In particular, $z_{\p}= \filter{\hat z}{\p}\cat\aout$ and,
+for  $\px\neq\p$, $\filter{\hat z}{\px}=z_{\px}$.
+Now, by definition of projection,  for each $\px\in\ptpof[z]$ we can set $\acword_{\px}\in\clang$
+as a word such that  $\proj{\acword_{\px}}{X}= z_{\px}$. 
+Since $z_{\p}= \filter{\hat z}{\p}\cat\aout$, we can infer that  
+$\acword_{\p}= \acword_1\cat\gint$ for some $\acword_1\in\clang$ such that
+$\proj{\acword_1}{A}= \filter{\hat z}{\p}$. 
+ 
+ We now observe that  $\asem{\proj{\clang}{}}$ is prefix closed, 
+so $\hat z\in \asem{\proj{\clang}{}}$. 
+Hence, by $ \ssynch[\hat z]$ and  
+\cref{fac:asymmsubsymm}(\ref{fac:asymmsubsymm-aimps}), 
+$\join[\hat z]\in\ssem{\proj{\clang}{}}$. Then,
+since $\clang$ is CUI, we get $\join[\hat z]\in\clang$. 
+Moreover, by Fact \ref{fac:joinsplit}(\ref{fac:joinsplit-feqp}) for each $\px$,
+$\proj{\join[\hat z]}{X}=\filter{\hat z}{\px}$. 
+We now proceed by noticing that $\acword_1\neq\join[\hat z]$. In fact, otherwise, we would have $\join[\hat z]\cat\gint\in\clang$
+and hence, by $\cuui$, 
+${\join[\hat z]}\cat\gint\in\ssem{\proj{\clang}{}}$, 
+that is $\join[{\hat z\cat\aout\cat\ain}]\in\ssem{\proj{\clang}{}}$,
+contradicting the third conjunct of our assumption (\ref{eq:negass}).\\
+ Now, by setting $\acword=\join[\hat z]$, by the above
+we have that
+\begin{itemize}
+\item
+$\proj{\acword_1}{A} = \proj{\acword}{A}$\qquad 
+(since $\proj{\acword_1}{A}=\filter{\hat z}{\p}=\proj{\join[\hat z]}{A}=\acword$)
+%\item 
+%$\proj{\acword_2}{B} = \proj{\acword}{B}$
+\item
+$\acword_1\cat\gint\in\clang$
+\end{itemize} 
+So, by $\cuuiasym[\clang]$, $\acword\cat\gint=\join[\hat z]\cat\gint\in\clang$. 
+This, as previously shown, would imply  $\join[{\hat z\cat\aout\cat\ain}]\in\ssem{\proj{\clang}{}}$ that contradicts the third conjunct of (\ref{eq:negass}).
+\qed
+ \end{proof}
+ 
+ The CUI assumption in the above cannot be got rid of.
+ In fact there are systems projected projected from a language L,
+ for which the equality of the semantics 
+ does not hold but are not CUI.
+ {A->D, A->D, C->B} is not CUI and the semantics differ on proj{A->D, A->D, C->B} 
+% ========================
+% 
+%By definition of semantics (\cref{def:syncSem}), it is enough to show that 
+%the set
+%$$
+%Y = \Set{\hat u   \sst \ssynch[\hat u]\ \land\ \exists \p,\q,\msg[m].\  \hat u\cat\aout \in \asem{\proj{\clang}{}} \land\  \join[{\hat u\cat\aout\cat\ain}]\in\ssem{\proj{\clang}{}} }
+%$$
+%is empty.
+%By contradiction let us assume $Y$ not to be empty.
+%We can then take a word $\hat z\in Y$, namely such that $\ssynch[\hat z]$,
+%$\hat z\cat\aout\in \asem{\proj{\clang}{}}$ but $\hat z\cat\aout\cat\ain\not\in\asem{\proj{\clang}{}}$.
+%By definition of $\asem{\proj{\clang}{}}$, 
+%for each $\px\in\ptpof[\hat z\cat\aout]\subseteq\ptpset$  there is a $z_{\px}\in\proj{\clang}{X}\cap\alfact^*$ such that
+%$\filter{(\hat z\cat\aout)}{\px}=z_{\px}$. In particular, $z_{\p}= \hat z'_{\p}\cat\aout$ 
+%for some $\hat z'_{\p}$ and, if $\px\neq\p$, $\filter{\hat z}{\px}=z_{\px}$.
+%Now, by definition of projection,  for each $\px\in\ptpof[z]$ we can set $\acword_{\px}\in\clang$
+%as a word such that  $\proj{\acword_{\px}}{X}= z_{\px}$. 
+%Since $z_{\p}= \hat z'_{\p}\cat\aout$, we can infer that  
+%$\acword_{\p}= \acword_1\cat\gint$ for some $\acword_1\in\clang$ such that
+%$\proj{\acword_1}{A}= \hat z'_{\p}$. 
+%
+%We now observe that  $\asem{\proj{\clang}{}}$ is prefix closed, 
+%so $\hat z\in \asem{\proj{\clang}{}}$. 
+%Hence, by Fact \ref{fac:asymmsubsymm}, $\join[\hat z]\in\ssem{\proj{\clang}{}}$ and then,
+%since $\clang$ is CUI, we get $\join[\hat z]\in\clang$. 
+%Moreover, for $\px\neq\p$,
+%$\proj{\join[\hat z]}{X}=\filter{\hat z]}{\px}$. 
+%%So, in particular $\proj{\join[\hat z]}{B}=\filter{\hat z}{\q}=z_{\q}=\proj{\acword_{\q}}{B}$.
+%We notice that $\acword_1\neq\join[\hat z]$. In fact, otherwise, we would have $\join[\hat z]\cat\gint\in\clang$
+%and hence, by $\cuui$ and Fact \ref{fac:asymmsubsymm}, $\ssplit[{{\join[\hat z]}\cat\gint}]\in\asem{\proj{\clang}{}}$, that is $\hat z\cat\aout\cat\ain\in\asem{\proj{\clang}{}}$,
+%contradicting what we had assumed. 
+%
+%
+%
+%
+%Now, by setting $\acword=\join[\hat z]$ % and $\acword_2=\acword_{\q}$
+%we have that
+%\begin{itemize}
+%\item
+%$\proj{\acword_1}{A} = \proj{\acword}{A}$
+%%\item 
+%%$\proj{\acword_2}{B} = \proj{\acword}{B}$
+%\item
+%$\acword_1\cat\gint\in\clang$
+%\end{itemize} 
+%So, by CUI2, $\acword\cat\gint\in\clang$. 
+%This, as shown above, would imply by definition implies $\hat z\cat\aout\cat\ain\in\asem{\proj{\clang}{}}$, so contradicting that $\hat z\in Y$.
+%\qed
+%
+%Let us now consider $\hat z=\aact[a]_0\cat\ldots\cat\aact[a]_{n-1}$. By definition it follows that
+%$\hat z \in \ssem{\proj{\clang}{}}$. 
+%Moreover, for each $\px\in\ptpof[z]\subseteq\ptpset$  there is a
+%subsequence $z_{\px}$ of $\hat z$ of the form $\aact[a]_{j_{\px}0}\cat\ldots\cat\aact[a]_{j_{\px}m_{\px}}$ belonging to $\proj{\clang}{X}$ such that $\hat z \in \shuffle_{\ptpof[z]}z_{\px}$.
+%
+%For each $\px\in\ptpof[z]$ let now $\acword_{\px}\in\clang$ be a word such that $\proj{\acword}{X}= z_{\px}$. 
+%By definition of projection it follows that $\acword_{\p}$ has the form $\acword'\cat\gint$ 
+%for some $\acword'$.
+%By Lemma XXX 
+% This immediately implies that $\acword_{\q}$ has the form $\acword''\cat\gint$ for some $\acword''$.
+% 
+% 
+%
+%Let now be $\acword = \acword_1\cat\gint$ the word in \\
+%$(\subseteq)$
+
+\begin{example}
+In \cref{ex:simple2} we have seen that the two synchronous semantics differ on the g-language 
+$\clang$ of \cref{ex:simple}.
+In fact it is possible to show that $\cuuiasym[{\clang}]$ does to hold.
+By taking $\acword_1=\gint[][A][m][D]$ and $\acword=\gint[][A][m][B]$, we have that
+$$\proj{\acword_1}{C}=\emptyword = \proj{\acword}{C} \quad\text{ and }\quad \acword_1\cat\gint[][C][m][B]\in\clang$$
+However $\gint[][A][m][B]\cat\cat\gint[][C][m][B]= \acword\cat\cat\gint[][C][m][B]\not\in\clang$.
+\finex
+\end{example}
+
+
+\begin{corollary}
+Let $\clang$ be a CUIasym g-language. Then $\proj{\clang}{}$ is a-synch correct and complete for $\clang$.
+\end{corollary}
+
+
+It is now possible to show that if we consider the calculus of MultiParty Sessions of [DezaniSeveri]
+(restricted to sequential reductions), on any system obtained by projecting a well-formed 
+global types the two synchronous semantics are equivalent.
+
+
+\begin{proposition}
+For each global type ${\mathsf G}$,\\
+\centerline{${\mathsf G}$ well-formed\ $\implies$\ $\cuuiasym[{\clang({\mathsf G})}]$.}
+\end{proposition}
+
+\begin{proof}
+Let ${\mathsf G}$ be well-formed.
+By contradiction, let us assume $\cuuiasym[{\clang({\mathsf G})}]$ not to hold.
+This means that there exist $\acword_1,\acword\in\clang({\mathsf G})$ such that, for a certain
+interaction $\gint$,
+$$
+\proj{\acword_1}{A} = \proj{\acword}{A}      \qquad      \acword_1\cat\gint\in\clang({\mathsf G})   
+\qquad \acword\cat\gint\not\in\clang({\mathsf G})
+$$
+By well-formedness, each continuation of $\acword$ must contain an interaction with participant $\p$.
+Let us then consider $\acword$ with one of its  continuation that is a word of the form
+$$
+\acword\cat\acword'\cat \aint \qquad \text{where } \p\in\ptpof[\aint] \quad \text{and }\proj{\acword'}{A}=\emptyword
+$$
+Now, since each participant has to distinguish each pair of maximal branches by two inputs,
+we have necessarily that $\aint=\gint$. Moreover, since  $\proj{\acword'}{A}=\emptyword$,
+also $\acword\cat \aint\cat\acword'\in\clang({\mathsf G}) $, contradicting our assumption
+$\acword\cat\gint\not\in\clang({\mathsf G})$
+\qed
+\end{proof}
+
+
+%\begin{proposition}[FALSE]
+%Let $\clang$ be a  g-language. 
+%$$\cuuisym[\clang] \implies \ba[\clang]$$
+%\end{proposition}
+%\begin{proof}
+%Let us assume $\cuuisym[\clang]$. By contradiction, let us assume also $\ba[\clang]$ not to hold.
+%So, by definition, we have two maximal words $\acword_1, \acword_2\in\clang$ and a participant
+%$\p$ such that $\proj{\acword_1}{A}\prec \proj{\acword_2}{A}$.
+%Let now $\hat\acword_1$ and $\hat\acword_2$ be the longest prefixes of, respectively
+%$\acword_1$ and  $\acword_2$ such that $\proj{\hat\acword_1}{A}= \proj{\hat\acword_2}{A}$.
+%Since $\proj{\acword_1}{A}\prec \proj{\acword_2}{A}$ there exists a prefix of $\acword_2$ 
+%of the form $\hat\acword_2\hat\acword'_2\cat\gint$, 
+%where $\proj{\hat\acword'_2}{A}=\emptyword$. 
+%Since $\proj{\hat\acword_2\hat\acword'_2}{A}=\proj{\hat\acword_1}{A}$
+%\end{proof}
+
+
+Two interactions $\aint$ and $\aint[b]$ are \emph{independent} (in
+symbols $\intpar$)
+when % their sets of participants are disjoint, namely
+$\ptpof[\aint] \cap \ptpof[{\aint[b]}] = \emptyset$.
+%
+Informally, a g-language is \emph{concurrency closed} when
+\quo{independent} interactions can be swapped.
+%
+The concurrency closure on infinite words is delicate.
+%
+One in fact has to allow infinitely many swaps while avoiding that
+they make an interaction disappear by \quo{pushing it infinitely
+  down}.
+%
+Technically, we consider Mazurkiewicz's traces~\cite{maz86} on
+$\alfint$ with independence relation $\intpar$:
+\begin{definition}[Concurrency closure]\label{def:cc}
+  Let $\comm$ be the reflexive and transitive closure of the relation
+  $\equiv$ on finite interaction words defined by
+  $\acword\,\aint\,\aint[b]\,\acword' \equiv
+  \acword\,\aint[b]\,\aint\,\acword'$ where $\intpar$.
+  %
+  Following \emph{\cite[Def. 2.1]{Gastin90}}, $\comm$ extends to
+  $\alfint^\omega$ by letting $\acword,\acword'\in\alfint^\omega$ and defining
+  \[
+	 \acword \comm\acword' \quad\iff\quad \acword \ll\acword' \qand \acword' \ll\acword
+  \]
+  %
+  where
+  $\acword \ll \acword'$ iff for each finite prefix $\acword_1$ of
+  $\acword$ there are a finite prefix $\acword_1'$ of $\acword'$ and a
+  g-word $\hat \acword \in \alfint^\star$ such that
+  $\acword_1 \cat \hat \acword \comm \acword_1'$.
+  %
+  A g-language $\clang$ is \emph{concurrency closed} (c-closed for
+  short) if it coincides with its concurrency closure, namely
+  $\clang = \Set{\acword \in \alfint^\infty \sst \exists
+	 \acword'\in\clang \qst \acword \comm \acword'}$.
+\end{definition}
+
+Semantics of systems are naturally c-closed since in a distributed setting
+independent events can occur in any order.
+%
+Indeed
+\begin{toappendix}
+The relation $\comm$ can be characterised as follows.
+  \begin{lemma}\label{lemma:equalProj}
+  Given a g-language $\clang$ and two words
+  $\acword_1, \acword_2 \in \clang$, $\acword_1 \comm \acword_2$ iff
+  $\proj{\acword_1}{\p} = \proj{\acword_2}{\p}$ for each
+  $\p \in \ptpof[\clang]$.
+\end{lemma}
+%\equalProj*
+\end{toappendix}
+\begin{appendixproof}
+  This follows directly from~\cite[Proposition 2.2]{Gastin90}.
+  \qed
+\end{appendixproof}
+
+\begin{restatable}{proposition}{ccsem}\label{prop:par}
+  Let $\aCS$ be a system. Then $\ssem{\aCS}$ is
+  c-closed.
+\end{restatable}
+\begin{toappendix}
+  \ccsem*
+\end{toappendix}
+\begin{appendixproof}
+  Trivial, since closure under swap does not change the projection by
+  \cref{lemma:equalProj}.
+  \qed
+\end{appendixproof}
+
+% \paragraph*{The ($\proj{(\_)}{}$,$\ssem{\_}$) Galois connection\footnote{We thank an anonymous referee for the introduction of this paragraph.}}
+
+
+The intuition that g-languages, equipped with the projection and
+semantic functions of \cref{def:projection} and \cref{def:syncSem}, do
+correspond to a natural syntax and semantics for the abstract notion
+of choreography, can be strengthened by showing that these functions
+form a Galois connection.
+
+Let us define
+$\glanguages = \Set{\clang \sst \clang \text{ is a g-language}}$ and
+$\csystems = \Set{\aCS \sst \aCS \text{ is a system}}$.
+%
+Moreover, given $\aCS, \aCS' \in \csystems$, we define
+$\aCS\subseteq\aCS'$ if $\aCS(\p)\subseteq \aCS'(\p)$ for each \p.
+
+\begin{restatable}{proposition}{gc}\label{prop:gc}
+  The functions $\proj{\_}{}$ and $\ssem{\_}$ form a (monotone)
+  Galois connection between the posets $(\glanguages,\subseteq)$ and
+  $(\csystems,\subseteq)$, namely, $\proj{\_}{}$ and $\ssem{\_}$ are
+  monotone functions such that, given $\clang\in\glanguages$ and
+  $\aCS\in\csystems$:
+$$\proj{\clang}{}\subseteq\aCS  \iff  \clang\subseteq\ssem{\aCS}$$
+\end{restatable}
+\begin{toappendix}
+  \gc*
+\end{toappendix}
+\begin{appendixproof}
+$\proj{(\_)}{}$ and $\ssem{\_}$ are trivially monotone by their definitions.
+($\implies$)
+  %Take a word $\acword \in \clang$.
+  %
+  We first observe that %By definition of semantics (\cfw \cref{def:syncSem})
+  $$
+  \begin{array}{llll}
+	 \ssem{\proj{\clang}{}} & = & \Set{\acword' \in \alfint^\infty \sst \forall \p \in
+      \ptpset \qst \ptpof[\acword'] \subseteq \ptpset \ \wedge\ \proj{\acword'}{\p} \in \proj{\clang}{\p}}
+      & \qquad \text{ (\cref{def:syncSem})}\\
+      & \subseteq & \Set{\acword' \in \alfint^\infty \sst \forall \p \in
+      \ptpset \qst \ptpof[\acword'] \subseteq \ptpset \ \wedge\ \proj{\acword'}{\p} \in \aCS(\p)} &\qquad \text{ (hyp. $\proj{\clang}{} \subseteq\aCS$)} \\
+     & = & \ssem{\aCS}  & \qquad \text{ (\cref{def:syncSem})}
+ \end{array}
+ $$
+ Hence, given a word $\acword \in \clang$, we get
+ $\acword \in \ssem{\proj{\clang}{}}$ by construction and  $\acword \in \ssem{\aCS}$ by the above.
+ \\
+ ($\Leftarrow$) We have to show that
+ $\proj{\clang}{A}\subseteq\aCS(\p)$ for each $\p$.  Let hence
+ $\acword_{\p} \in \proj{\clang}{\p}$. By definition there is
+ $\acword \in \clang$ with $\proj{\acword}{\p}=\acword_{\p}$.
+  %
+  Then $\acword \in \ssem{\aCS}$ by hypothesis and hence, by \cref{def:syncSem}, 
+  $\proj{\acword}{\p}(=\acword_{\p})\in\ssem{\aCS}$.
+  %
+  \qed
+\end{appendixproof}
+
+Notice that, by \cref{prop:gc}, $\proj{\clang}{}\subseteq\aCS$ can be
+understood as \quo{$\clang$ can be realized by $\aCS$} according to the
+notion of realisability frequently used in the literature, namely that
+all behaviours of the choreography are possible for the system.
+
+It is well-known that, given a Galois connection $(f_\star,f^\star)$
+the function $\cl = f^\star \circ f_\star$ is a closure operator
+namely, it is monotone ($x \leq y \implies \cl[x] \leq \cl[y]$),
+extensive ($x \leq \cl[x]$), and idempotent
+($\cl[x] = \cl[{\cl[x]}]$).
+%
+In our setting $\cl(\_) = \ssem{\proj \_ {}}$, hence the above boils down
+to the following corollary:
+\begin{corollary}\label{fac:clgc}
+  For all g-languages $\clang, \clang' \in \glanguages$,
+  \begin{description}
+  \item[monotonicity:]
+	 $\clang \subseteq \clang' \implies \ssem{\proj \clang {}}
+	 \subseteq \ssem{\proj{\clang'} {}}$,
+  \item[extensiveness:] $\clang \subseteq \ssem{\proj{\clang}{}}$,
+  \item[idempotency:] $\ssem{{\proj \clang {}}} = \ssem{\proj{\ssem{\proj{\clang}{}}}{}}$.
+  \end{description}
+\end{corollary}
+%
+As we shall see, extensiveness coincides with completeness
+(\cref{def:cc}) and, together with monotonicity, implies
+\emph{harmonicity} (\cref{def:properties}).
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "main"
+%%% TeX-master: "main"
+%%% TeX-master: "main"
+%%% End:

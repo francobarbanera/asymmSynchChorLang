@@ -1,0 +1,115 @@
+\documentclass[a4paper, UKenglish, autoref,
+%thm-restate,
+% numberwithinsect  %%% this should be an outdated option replaced by the following two
+envcountsect, envcountsame
+% monochrome,
+% orivec,
+]{llncs}
+ 
+\input{styles}
+\input{macros_util}
+\input{macroIv}
+\input{ggmacros}
+\newcommand{\px}{{\ptp[x]}}
+\newcommand{\py}{{\ptp[y]}}
+\newcommand{\cat}{\!\cdot\!}
+
+
+\title{   
+  % \thanks{\tnxbehapi \tnxitmatters \tnxunict \tnxgncs The authors
+  % thanks the reviewers for their helpful comments and also M.~Dezani
+  % for her support.}
+}
+\titlerunning{   }
+
+\author{Franco Barbanera\inst 1
+  \and
+  Ivan Lanese\inst 2
+  \and
+  Emilio Tuosto\inst 3
+  \\
+  \email{barba@dmi.unict.it, ivan.lanese@gmail.com, emilio.tuosto@gssi.it}
+}
+\authorrunning{F. Barbanera et. al.}
+\institute{
+  Dept. of Mathematics and Computer Science, University of Catania (Italy)
+  \and
+  Focus Team, University of Bologna/INRIA (Italy)
+  \and
+  Gran Sasso Science Institute (Italy)
+  }
+
+\pagestyle{headings}
+
+%\keywords{
+%  Choreographies, formal languages, 
+%  message passing, (dead)lock freedom.
+%} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+
+\end{abstract}
+
+\section{Introduction}\label{sec:intro}
+\input{intro}
+
+\section{    }\label{sec:c-lang}
+\input{opSems}
+
+%\section{Correctness and Completeness}\label{sec:ui}
+%\input{ui}
+%
+%\section{Communication Properties}\label{sec:prop}
+%\input{properties}
+%
+%\section{Communication Properties by Construction}\label{sec:proj-prop}
+%\input{proj-properties}
+%
+%\section{Global Types as Choreography Languages}\label{sec:mpst}
+%\input{DS-globalTypes}
+%
+%\section{Choreography Automata}\label{sec:chor-automata}
+%\input{choreography-automata}
+%
+%\section{Concluding Remarks}\label{sec:conc}
+%\input{conc}
+%
+%\noindent\textbf{Acknowledgements}
+%We thank an anonymous reviewer for suggesting the relations
+%with Galois connections.
+
+% \nocite{*}
+\bibliographystyle{plainurl}
+\bibliography{bib}
+
+%\appendix
+
+\end{document}
+
+\section{Definitions for fair and unfair runs}
+\label{sec:fd-prop}
+\input{fd-prop}
+
+\section{Alternative synchronisations and their properties}
+\label{sec:altsync}
+\input{alternativeSynch}
+
+\section{A proposal for unrestricted c-languages}
+\input{unrestr-lang}
+
+\section{Synchronous Communicating Finite-State Machines}
+\label{sec:choraut}
+\input{chor-automata}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% TeX-master: t
+%%% TeX-master: t
+%%% End:
