@@ -239,12 +239,12 @@ such as~\cite{BravettiZ07,CarboneHY12,Dezani-Ciancaglini16,SeveriD19}.
 
 \subsection{Asymmetric synchronous semantics}
 
-In the asymmetric case we can look at the syncronous communication of the message $\msg$
-from $\p$ to $\q$ as composed by the choice of $\aout$ among the possible outputs and the
+In the asymmetric case we can look at a syncronous communication of the message $\msg$
+from $\p$ to $\q$ as composed by two actions: the choice of $\aout$ among the possible outputs and the
 handshaking communication resulting in the reception of the message by $\q$ ($\ain$).
-In the system several different actions performed by participants other that $\p$ and $\q$
-can occur in between $\aout$ and $\ain$. The most general asymmetric semantics take into account
-such a possibility. 
+Of course several different actions performed by participants other that $\p$ and $\q$
+could occur in between $\aout$ and $\ain$. The following definition describe the words
+of actions that correspond to possible runs in a system with asymmetric synchronous communincations.
  
 
 \begin{definition}[Deferred synchronous words]
@@ -258,14 +258,9 @@ for each action $\ain$ in $z$, the first action preceding it of the form $\p\,\_
 We define $DS=\Set{z\in\alfact^\infty \sst \dsynch[z]}$.
 \end{definition}
 
+The following definition of asymmetric semantics for a communicating system $\aCS$ corresponds
+to the possible runs (deferred synchronous words) of  $\aCS$.
 
-for each word w in the general semantics there is another word w' in the general semantics
-such that w' is synchronous.
-So we consider now a semantics modulo equivalence of words like w and w'.
-
-
-
-[dare un nome differente a $\comm$ rispetto a chorlang?]
 
 \begin{definition}[Unrestricted asymmetric synchronous semantics]
  \[
@@ -275,19 +270,33 @@ So we consider now a semantics modulo equivalence of words like w and w'.
   is the \emph{{\bf unrestricted asymmetric} (synchronous) semantics} of $\aCS$;
 \end{definition}
 
-The above unrestricted semantics could be not comfortably handled.
+Notice that we need to consider only elements of $DS$, otherwise the semantics of a system like
+$\aCS = ({\alang}_{\px})_{\ptp[X] \in \Set{\p,\q}}$ where\\
+\centerline{$\alang_{\p}= \Set{\aout[A][B][][m]}$ \qquad $\alang_{\q}= \Set{\ain[A][B][][m]^\omega}$ }
+would contain also runs like 
+$\aout[A][B][][m]\cat\ain[A][B][][m]^\omega$ or $\ain[A][B][]\cat\aout[A][B][][m]$, which are trivially nonsensical for the intended synchronous interactions.
+
+
+The above unrestricted semantics could be, however, not comfortably handled.
 We then restrict it to a sound subset that safely \quo{represents} it. 
-The following observation is then at the basis of what will shall use as the 
+The following observation is at the basis of what will shall use as the 
 actual asymmetric synchronous semantics (\cref{def:syncSem} below)
 
-Let us consider a generic trace $z$ of a system with asymmetric synchronous communication 
+Let us consider a generic trace $z$ of a system with asymmetric synchronous communication possibly
 containing a number of output actions which have not been \quo{matched} yet by their corresponding
-input actions. It is not difficult to see that for any $z'$ such that
-$z\cat z'$ belongs to the sematics of the system (i.e. $z'$ is a \quo{continuation} of $z$), 
-we have that $\hat z \cat z'$ also belongs to the sematics, for any $\hat z$ where the unmatched
-output actions appear in a consistent different order.
-In particular, in $\hat z$, the unmatched output action can be taken into account only in the final 
-part of $z$ 
+input actions. It is not difficult to see that we can rearrange the actions of $z$ in a \quo{consistent} way, in order to obtain another word belonging to the semantics and of the form
+$\hat z\cat z'$, where $z'$ contains only the unmatched output and in $\hat z$ each
+output is immediately followed by the corresponding input.
+
+% belongs to the sematics of the system (i.e. $z'$ is a \quo{continuation} of $z$), 
+%we have that $\hat z \cat z'$ also belongs to the sematics, for any $\hat z$ where the unmatched
+%output actions appear in a consistent different order.
+%In particular, in $\hat z$, the unmatched output action can be taken into account only in the final 
+%part of $z$ 
+
+for each word w in the general semantics there is another word w' in the general semantics
+such that w' is synchronous.
+So we consider now a semantics modulo equivalence of words like w and w'.
 
 
 \begin{definition}[(prefix/strict) synchronous words]
@@ -368,7 +377,7 @@ $\pref[{\ssplit[{\ssem{\aCS}}]}] \subseteq \asem{\aCS}$.
 \label{ex:simple2}
 The two semantics are non equivalent in general.
 Let us consider $\aCS = ({\alang}_{\px})_{\ptp[X] \in \Set{\p,\q}}$ where\\
-\centerline{$\alang_{\p}= \Set{\aout[A][B][][m], \aout[A][B][][y]}$ \qquad $\alang_{\p}= \Set{\ain[A][B][][m]}$ }
+\centerline{$\alang_{\p}= \Set{\aout[A][B][][m], \aout[A][B][][y]}$ \qquad $\alang_{\q}= \Set{\ain[A][B][][m]}$ }
 is clearly lock-free with the symmetric semantics and non lock-free with the asymmetric one.
 
  Even in case we restrict to systems

@@ -48,7 +48,7 @@ $$
 \begin{array}{rcl}
 \mathcal{M} \mid {\p}\triangleright  \text{\bf !}\Set{\q:\al.P}{\cup}\Set{\q_i:\al_i.P'_i}_{i\in I}
 & \arro{\aout} &
-\mathcal{M} \mid {\p}\triangleright  \q\text{\bf !}[\msg.P]
+\mathcal{M} \mid {\p}\triangleright  \q\text{\bf !}[\msg].P
 \\[2mm]
 \mathcal{M} \mid {\p}\triangleright   \q\text{\bf !}[\msg.P] \mid 
 {\q}\triangleright ?\Set{\p:\al.Q}{\cup}\Set{\p_j:\al_j.Q'_j}_{j\in J}  
@@ -73,7 +73,7 @@ $$
 \arro{\gint[][A][m][B]}
 \mathbf{0} \mid \mathbf{0}
 $$
-whereas, in the asymmetric one the system can get stuck even if some process has not completed (i.e. reduced to $\mathbf{0}$
+whereas, in the asymmetric one the system can get stuck even if some process has not completed (i.e. reduced to $\mathbf{0}$)
 
 $$
 {\p}\triangleright  \text{\bf !}\Set{\ptp[B]{:}\msg.\mathbf{0},\, \ptp[B]{:}\msg[n].\mathbf{0}}
@@ -86,10 +86,37 @@ $$
 \not\!\longrightarrow
 $$
 
+In order to compare the two semantics some natural relation has to be formalised,
+making equivalent sequences like $\gint[][A][m][B]\cat\gint[][C][n][D]$
+and $\aout\cat\ain\cat\aout[C][D][][n]\cat\ain[C][D][][n]$.
+As well as $\aout\cat\ain\cat\aout[C][D][][n]\cat\ain[C][D][][n]$ and $\aout\cat\aout[C][D][][n]\cat\ain\cat\ain[C][D][][n]$.
+
+
+The different behaviours in the above example depends immediately on the fact that a participant
+possesses an output action and no participants contains the correspondi input.
+
+This problem never arise if, as in many choreographic approaches to the development of concurrent systems (MPTSs, for instance), the latter
+are obtained by means of a projection operation on choreogreaphies, as done in MPSTs.
+A global type formalism for our example can be
+
+$$\mathsf{G} ::= \mathbf{end} \mid  \bigvee_{i\in I}\Set{\p_i\rightarrow\q_i{:}\msg[m]_i.\mathsf{G}_i}$$
+
+In any MPST setting (any choreographic setting as a matter of facts) the least property
+expected is that a system obtained by projection do behave as described by the global type.
+It is then reasonable to restrict our investigation to global descriptions whose
+projected system - with the symmetric semantics -  behaves as the global description prescribes.
+For instance, Let us consider the following global type.
+$$
+\mathbf{G} = \bigvee\Set{\p\rightarrow\ptp[D]{:}\msg[m].\ptp[C]\rightarrow\ptp[B]{:}\msg[m].\mathbf{end},\,
+                                         \p\rightarrow\ptp[B]{:}\msg[m].\mathbf{end},\,
+                                         \ptp[C]\rightarrow\ptp[B]{:}\msg[m].\p\rightarrow\ptp[D]{:}\msg[m].\mathbf{end}}
+$$
+
+The system obtained by projection is
 
 
 $$
-\aCS = {\p}\triangleright  \text{\bf !}\Set{\ptp[D]{:}\msg.\mathbf{0},\, \ptp[B]{:}\msg.\mathbf{0}}
+\proj{\mathbf{G}}{} = {\p}\triangleright  \text{\bf !}\Set{\ptp[D]{:}\msg.\mathbf{0},\, \ptp[B]{:}\msg.\mathbf{0}}
 \mid 
 {\q}\triangleright  \text{\bf ?}\Set{\ptp[C]{:}\msg.\mathbf{0},\, \ptp[A]{:}\msg.\mathbf{0}}
 \mid
@@ -101,36 +128,73 @@ $$
 with the symmetric semantics, 
 the only possible reduction sequences are
 $$
-\aCS \longrightarrow
+\proj{\mathbf{G}}{} \arro{\gint[][A][m][D]}
 {\q}\triangleright  \text{\bf ?}\Set{\ptp[C]{:}\msg.\mathbf{0},\, \ptp[A]{:}\msg.\mathbf{0}}
 \mid
 {\ptp[C]}\triangleright  \text{\bf !}\Set{\ptp[B]{:}\msg.\mathbf{0}}
-\longrightarrow
+\arro{\gint[][C][m][B]}
 \mathbf{0}
 $$
 or
 $$
-\aCS \longrightarrow
+\proj{\mathbf{G}}{} 
+\arro{\gint[][C][m][B]}
 {\p}\triangleright  \text{\bf !}\Set{\ptp[D]{:}\msg.\mathbf{0},\, \ptp[B]{:}\msg.\mathbf{0}}
 \mid
 {\ptp[D]}\triangleright  \text{\bf ?}\Set{\ptp[A]{:}\msg.\mathbf{0}}
-\longrightarrow
+\arro{\gint[][A][m][D]}
 \mathbf{0}
 $$
 or
 $$
-\aCS \longrightarrow
+\proj{\mathbf{G}}{} \arro{\gint[][A][m][B]}
 {\ptp[C]}\triangleright  \text{\bf !}\Set{\ptp[B]{:}\msg.\mathbf{0}}
 \mid
 {\ptp[D]}\triangleright  \text{\bf ?}\Set{\ptp[A]{:}\msg.\mathbf{0}}
 \not\longrightarrow
 $$
 
+That is, exactly as described by $\mathbf{G}$.
+Such a property, is usually obtained in MPTSs formalisms by means of strong restrictions
+on the syntax (forcing the same sender in the first interactions in a disjunction)
+and requirements on the processes obtained by projection.
+In our example the htwo syntax differ on  $\proj{\mathbf{G}}{}$.
 
 
-The natural question to ask is characte
+As a matter of fact 
+{\small
+$$
+\begin{array}{rcl}
+\proj{\mathbf{G}}{} 
+           & \arro{\aout[A][B][][m]} &
+{\p}\triangleright  \q\text{\bf !}[\msg].\mathbf{0}
+\mid 
+{\q}\triangleright  \text{\bf ?}\Set{\ptp[C]{:}\msg.\mathbf{0},\, \ptp[A]{:}\msg.\mathbf{0}}
+\mid
+{\ptp[C]}\triangleright  \text{\bf !}\Set{\ptp[B]{:}\msg.\mathbf{0}}
+\mid
+{\ptp[D]}\triangleright  \text{\bf ?}\Set{\ptp[A]{:}\msg.\mathbf{0}}\\
+      &   \arro{\ain[A][B][][m]}&
+{\ptp[C]}\triangleright  \text{\bf !}\Set{\ptp[B]{:}\msg.\mathbf{0}}
+\mid
+{\ptp[D]}\triangleright  \text{\bf ?}\Set{\ptp[A]{:}\msg.\mathbf{0}}\\
+      &   \arro{\aout[C][B][][m]} &
+{\ptp[C]}\triangleright  \ptp[B]\text{\bf !}[\msg].\mathbf{0}
+\mid
+{\ptp[D]}\triangleright  \text{\bf ?}\Set{\ptp[A]{:}\msg.\mathbf{0}}\\
+   &\not\!\!\longrightarrow &
+\end{array}
+$$
+}
 
-
+In our simplified setting, our investigation could be worded as:
+Is it possible to characterise (symmetrically) correct and complete global types 
+such that on their projections the two semantics are (modulo some equivalence of the sort
+mentioned before) equivalent?
+This problem is can be also rephrased as: is it possible to characterise
+(asymmetrically) correct and complete global types?
+A really general solution, however, should not work on the choreographic model of MPTSs only.
+We shall then consider the choreographic framework of FCL.
 
 
 
