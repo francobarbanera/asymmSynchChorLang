@@ -1,6 +1,6 @@
  \newcommand{\shuffle}{\,{{\sqcup}\hspace{-1.5pt}{\sqcup}}\,}
  \newcommand{\slang}{\mathtt{L}}
- \newcommand{\filter}[2]{#1_{\mid #2}}
+ \newcommand{\filter}[2]{{#1}_{\mid #2}}
 \mkfun{\ssplit}{split}{}
 \mkfun{\join}{join}{}
 \mkfun{\subject}{subj}{}
@@ -500,60 +500,37 @@ $\acword\cat\gint\in{{\clang}}$, contradicting the third conjunct of (\ref{eq:la
  one of the two following possibilities can occur.
  \begin{enumerate}[a)]
  \item
+ \label{lab:finite}
  There exits $z\in \asem{\proj{\clang}{}}$ such that $z\in \alfact^*$, $z$ is maximal in 
  $\asem{\proj{\clang}{}}$ and $\neg\ssynch[z]$.
- 
+ \item
+  \label{lab:infinite}
+ There exits $z\in \asem{\proj{\clang}{}}$ such that $z\in \alfact^{\omega}$, $\neg\ssynch[z]$
+ and, for each $z'\in\asem{\proj{\clang}{}}$,
+ $z\not\sqsubseteq_{\mathsf{ss}}z'$.
  \end{enumerate}
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- \begin{equation}
- \label{eq:aneqs}
- \asem{\proj{\clang}{}} \neq  \pref[{\ssplit[\ssem{\proj{\clang}{}}]}].
- \end{equation}
- Since, by \cref{fac:asymmsubsymm}( \ref{fac:asymmsubsymm-asubs}),
- $\pref[{\ssplit[{\ssem{\proj{\clang}{}}}]}] \subseteq \asem{\proj{\clang}{}}$
- we have that our assumption (\ref{eq:aneqs}) correspond to 
- $\asem{\proj{\clang}{}}\not\subseteq \pref[{\ssplit[{\ssem{\proj{\clang}{}}}]}]$.
- By \cref{fac:asymmsubsymm}(\ref{fac:asymmsubsymm-aimps}) this in turn corresponds to
- asserting that the set 
- $$
- I = \Set{z\in\asem{\proj{\clang}{}} \sst \neg\ssynch[{z}] \land 
- \forall \hat\acword\in\ssem{\proj{\clang}{}}.\ z\not\preceq \ssplit[{\hat w}]}$$
- is non empty.
- 
- 
- ==============================
- 
- 
- This implies that, for certain $\hat z \in\alfact^*$ and $\p,\q,\msg[m]$, $z$ is of the form $z=\hat z\cat\aout$ and such that
- \begin{equation}
- \label{eq:negass}
-% \exists \hat z \in\alfact^\infty \ssynch[\hat z]\ \land\ \exists \p,\q,\msg[m].\  \hat z\cat\aout \in \asem{\proj{\clang}{}} \land\  
- \join[{\hat z\cat\aout\cat\ain}]\not\in\ssem{\proj{\clang}{}}
- \end{equation}
- In fact, if we had  $\join[{\hat z\cat\aout\cat\ain}]\in\ssem{\proj{\clang}{}}$
- we would also have $\join[{\hat z\cat\aout\cat\ain}]\in\ssem{\proj{\clang}{}}$
- 
- 
- By definition of $\asem{\proj{\clang}{}}$, 
-for each $\px\in\ptpof[\hat z\cat\aout]$  there is a $z_{\px}\in\proj{\clang}{X}$ such that
-$\filter{(\hat z\cat\aout)}{\px}=z_{\px}$. In particular, $z_{\p}= \filter{\hat z}{\p}\cat\aout$ and,
-for  $\px\neq\p$, $\filter{\hat z}{\px}=z_{\px}$.
+ We show now how to proceed towards a contradiction in both of the above cases.
+ %
+ \begin{description}
+ \item[ \ref{lab:finite})]
+ %
+ By Lemma XXX, since $\neg\ssynch[z]$ and $\psynch[z]$ there exists 
+ $z'\in\asem{\proj{\clang}{}}$ such that $z\commds z' = \hat z \cat\aout\cat o$ where
+ $\hat z = \ssplit[\acword]$ for a certain $\acword\in\alfint^*$ and $\aout\cat o$ is a sequence
+ of unmatched 
+ output action in $z$. 
+ Notice that, by Lemma YYY, also $\hat z\cat\aout\cat o$ is maximal in $\asem{\proj{\clang}{}}$.
+  By definition of $\asem{\proj{\clang}{}}$, 
+for each $\px\in\ptpof[\hat z\cat\aout\cat o]$  there is a $z_{\px}\in\proj{\clang}{X}$ such that
+$\filter{(\hat z\cat\aout\cat o)}{\px}=z_{\px}$. In particular, $z_{\p}= \filter{\hat z}{\p}\cat\aout$ and,
+for  $\px\neq\p$, $z_{\px} = \filter{\hat z}{\px}\cat  \filter{o}{\px}$.
 Now, by definition of projection,  for each $\px\in\ptpof[z]$ we can set $\acword_{\px}\in\clang$
 as a word such that  $\proj{\acword_{\px}}{X}= z_{\px}$. 
 Since $z_{\p}= \filter{\hat z}{\p}\cat\aout$, we can infer that  
 $\acword_{\p}= \acword_1\cat\gint$ for some $\acword_1\in\clang$ such that
 $\proj{\acword_1}{A}= \filter{\hat z}{\p}$. 
- 
+
+
  We now observe that  $\asem{\proj{\clang}{}}$ is prefix closed, 
 so $\hat z\in \asem{\proj{\clang}{}}$. 
 Hence, by $ \ssynch[\hat z]$ and  
@@ -562,26 +539,143 @@ $\join[\hat z]\in\ssem{\proj{\clang}{}}$. Then,
 since $\clang$ is CUI, we get $\join[\hat z]\in\clang$. 
 Moreover, by Fact \ref{fac:joinsplit}(\ref{fac:joinsplit-feqp}) for each $\px$,
 $\proj{\join[\hat z]}{X}=\filter{\hat z}{\px}$. 
-We now proceed by noticing that $\acword_1\neq\join[\hat z]$. In fact, otherwise, we would have $\join[\hat z]\cat\gint\in\clang$
-and hence, by $\cuui$, 
-${\join[\hat z]}\cat\gint\in\ssem{\proj{\clang}{}}$, 
-that is $\join[{\hat z\cat\aout\cat\ain}]\in\ssem{\proj{\clang}{}}$,
-contradicting the third conjunct of our assumption (\ref{eq:negass}).\\
- Now, by setting $\acword=\join[\hat z]$, by the above
+
+Now, by setting $\acword=\join[\hat z]$, by the above
 we have that
 \begin{itemize}
 \item
 $\proj{\acword_1}{A} = \proj{\acword}{A}$\qquad 
-(since $\proj{\acword_1}{A}=\filter{\hat z}{\p}=\proj{\join[\hat z]}{A}=\acword$)
-%\item 
-%$\proj{\acword_2}{B} = \proj{\acword}{B}$
+(since $\proj{\acword_1}{A}=\filter{\hat z}{\p}=\proj{\join[\hat z]}{A}=\proj{\acword}{A}$)
 \item
 $\acword_1\cat\gint\in\clang$
 \end{itemize} 
 So, by $\cuuiasym[\clang]$, $\acword\cat\gint=\join[\hat z]\cat\gint\in\clang$. 
-This, as previously shown, would imply  $\join[{\hat z\cat\aout\cat\ain}]\in\ssem{\proj{\clang}{}}$ that contradicts the third conjunct of (\ref{eq:negass}).
+We notice now that 
+$\proj{(\acword\cat\gint)}{B} = 
+  \proj{(\join[\hat z]\cat\gint)}{B} =
+  \filter{(\hat z\cat\ain)}{\q}$.
+Moreover, since $\aout\cat o$ is a sequence of unmatched  output action,
+we get that  $\filter{(\hat z\cat\ain)}{\q} = \filter{(\hat z\cat\aout\cat o\cat\ain)}{\q}$.
+So, from what previously inferred and the above, we can obtain
+\begin{itemize}
+\item
+$ \filter{(\hat z\cat\aout\cat o\cat \ain)}{\p}= \filter{(\hat z\cat\aout\cat o)}{\p} = z_{\p}\in\proj{\clang}{A}$
+\item
+$ \filter{(\hat z\cat\aout\cat o\cat\ain)}{\q} = \filter{(\hat z\cat \ain)}{\p} = \proj{(\acword\cat\gint)}{B}\in\proj{\clang}{B}$
+\item
+$ \filter{(\hat z\cat\aout\cat o\cat\ain)}{\px} =  \filter{(\hat z\cat o)}{\px}  = z_{\px}\in\proj{\clang}{X}
+\qquad \text{for } \px\not\in\Set{\p,\q}$
+\end{itemize}
+So, by definition of $\asem{\proj{\clang}{}}$, we get $\hat z\cat\aout\cat o\cat\ain\in\asem{\proj{\clang}{}}$, contradicting the maximality of $\hat z\cat\aout\cat o$.
+%
+\item[ \ref{lab:infinite})]
+%
+In this case, let $\aout$ be the first output action not matched in $z$. So, by Lemma ZZZ,
+there is $z'\commds z$ such that $z'$ has the form
+$z'=z_1\cat\aout\cat z_2$, where $z_1=\ssplit[\acword]$ for some $\acword\in\alfint^*$.
+By definition of $\asem{\proj{\clang}{}}$, 
+for each $\px\in\ptpof[z_1\cat\aout\cat z_2]$  there is a $z_{\px}\in\proj{\clang}{X}$ such that
+$\filter{(z_1\cat\aout\cat z_2)}{\px}=z_{\px}$. 
+In particular, using Lemma TTT, $z_{\p}= \filter{z_1}{\p}\cat\aout$ and,
+for  $\px\neq\p$, $z_{\px} = \filter{z_1}{\px}\cat  \filter{z_2}{\px}$.
+Let now $\hat \acword$ the element of $\clang$ such that $\proj{\hat \acword}{A} = z_{\p}$.
+Since  $z_{\p}= \filter{z_1}{\p}\cat\aout\cat\filter{z_2}{\p}$, we have that
+$\hat \acword$ has the form $\hat \acword = \acword_1\cat\gint\cat\acword_2$.
+Now, by setting $\acword=\join[{z_1}]$, by the above
+we have that
+\begin{itemize}
+\item
+$\proj{\acword_1}{A} = \proj{\acword}{A}$\qquad 
+(since $\proj{\acword_1}{A}=\filter{z_1}{\p}=\proj{\join[z_1]}{A}=\proj{\acword}{A}$)
+\item
+$\acword_1\cat\gint\in\clang$
+\end{itemize} 
+So, by $\cuuiasym[\clang]$, $\acword\cat\gint=\join[z_1]\cat\gint\in\clang$. 
+We notice now that 
+$\proj{(\acword\cat\gint)}{B} = 
+  \proj{(\join[z_1]\cat\gint)}{B} =
+  \filter{(z_1\cat\ain)}{\q}$.
+Moreover, since $\aout$ is unmatched in $\aout\cat z_2$,
+we get that  $\filter{(z_1\cat\ain)}{\q} = \filter{(z_1\cat\aout\cat\ain\cat z_2)}{\q}$.
+So, from what previously inferred and the above, we can obtain
+\begin{itemize}
+\item
+$ \filter{(z_1\cat\aout\cat \ain\cat z_2)}{\p}= \filter{(z_1\cat\aout)}{\p} = z_{\p}\in\proj{\clang}{A}$
+\item
+$ \filter{(z_1\cat\aout\cat\ain\cat z_2)}{\q} = \filter{(z_1\cat \ain)}{\q} = \proj{(\acword\cat\gint)}{B}\in\proj{\clang}{B}$
+\item
+$ \filter{(z_1\cat\aout\cat\ain\cat z_2)}{\px} =  \filter{(z_1\cat z_2)}{\px}  = z_{\px}\in\proj{\clang}{X}
+\qquad \text{for } \px\not\in\Set{\p,\q}$
+\end{itemize}
+So, by definition of $\asem{\proj{\clang}{}}$, we get $z_1\cat\aout\cat\ain\cat z_2\in\asem{\proj{\clang}{}}$.
+Since the number of unmatched output in $z$ is finite, by iterating the above procedure
+we get an action of word $\tilde z$ such that $z\sqsubseteq\tilde z$, contradictingour assumption.
 \qed
- \end{proof}
+ \end{description}
+\end{proof} 
+% \begin{equation}
+% \label{eq:aneqs}
+% \asem{\proj{\clang}{}} \neq  \pref[{\ssplit[\ssem{\proj{\clang}{}}]}].
+% \end{equation}
+% Since, by \cref{fac:asymmsubsymm}( \ref{fac:asymmsubsymm-asubs}),
+% $\pref[{\ssplit[{\ssem{\proj{\clang}{}}}]}] \subseteq \asem{\proj{\clang}{}}$
+% we have that our assumption (\ref{eq:aneqs}) correspond to 
+% $\asem{\proj{\clang}{}}\not\subseteq \pref[{\ssplit[{\ssem{\proj{\clang}{}}}]}]$.
+% By \cref{fac:asymmsubsymm}(\ref{fac:asymmsubsymm-aimps}) this in turn corresponds to
+% asserting that the set 
+% $$
+% I = \Set{z\in\asem{\proj{\clang}{}} \sst \neg\ssynch[{z}] \land 
+% \forall \hat\acword\in\ssem{\proj{\clang}{}}.\ z\not\preceq \ssplit[{\hat w}]}$$
+% is non empty.
+% 
+% This implies that, for certain $\hat z \in\alfact^*$ and $\p,\q,\msg[m]$, $z$ is of the form $z=\hat z\cat\aout$ and such that
+% \begin{equation}
+% \label{eq:negass}
+%% \exists \hat z \in\alfact^\infty \ssynch[\hat z]\ \land\ \exists \p,\q,\msg[m].\  \hat z\cat\aout \in \asem{\proj{\clang}{}} \land\  
+% \join[{\hat z\cat\aout\cat\ain}]\not\in\ssem{\proj{\clang}{}}
+% \end{equation}
+% In fact, if we had  $\join[{\hat z\cat\aout\cat\ain}]\in\ssem{\proj{\clang}{}}$
+% we would also have $\join[{\hat z\cat\aout\cat\ain}]\in\ssem{\proj{\clang}{}}$
+% 
+% 
+% By definition of $\asem{\proj{\clang}{}}$, 
+%for each $\px\in\ptpof[\hat z\cat\aout]$  there is a $z_{\px}\in\proj{\clang}{X}$ such that
+%$\filter{(\hat z\cat\aout)}{\px}=z_{\px}$. In particular, $z_{\p}= \filter{\hat z}{\p}\cat\aout$ and,
+%for  $\px\neq\p$, $\filter{\hat z}{\px}=z_{\px}$.
+%Now, by definition of projection,  for each $\px\in\ptpof[z]$ we can set $\acword_{\px}\in\clang$
+%as a word such that  $\proj{\acword_{\px}}{X}= z_{\px}$. 
+%Since $z_{\p}= \filter{\hat z}{\p}\cat\aout$, we can infer that  
+%$\acword_{\p}= \acword_1\cat\gint$ for some $\acword_1\in\clang$ such that
+%$\proj{\acword_1}{A}= \filter{\hat z}{\p}$. 
+% 
+% We now observe that  $\asem{\proj{\clang}{}}$ is prefix closed, 
+%so $\hat z\in \asem{\proj{\clang}{}}$. 
+%Hence, by $ \ssynch[\hat z]$ and  
+%\cref{fac:asymmsubsymm}(\ref{fac:asymmsubsymm-aimps}), 
+%$\join[\hat z]\in\ssem{\proj{\clang}{}}$. Then,
+%since $\clang$ is CUI, we get $\join[\hat z]\in\clang$. 
+%Moreover, by Fact \ref{fac:joinsplit}(\ref{fac:joinsplit-feqp}) for each $\px$,
+%$\proj{\join[\hat z]}{X}=\filter{\hat z}{\px}$. 
+%We now proceed by noticing that $\acword_1\neq\join[\hat z]$. In fact, otherwise, we would have $\join[\hat z]\cat\gint\in\clang$
+%and hence, by $\cuui$, 
+%${\join[\hat z]}\cat\gint\in\ssem{\proj{\clang}{}}$, 
+%that is $\join[{\hat z\cat\aout\cat\ain}]\in\ssem{\proj{\clang}{}}$,
+%contradicting the third conjunct of our assumption (\ref{eq:negass}).\\
+% Now, by setting $\acword=\join[\hat z]$, by the above
+%we have that
+%\begin{itemize}
+%\item
+%$\proj{\acword_1}{A} = \proj{\acword}{A}$\qquad 
+%(since $\proj{\acword_1}{A}=\filter{\hat z}{\p}=\proj{\join[\hat z]}{A}=\acword$)
+%%\item 
+%%$\proj{\acword_2}{B} = \proj{\acword}{B}$
+%\item
+%$\acword_1\cat\gint\in\clang$
+%\end{itemize} 
+%So, by $\cuuiasym[\clang]$, $\acword\cat\gint=\join[\hat z]\cat\gint\in\clang$. 
+%This, as previously shown, would imply  $\join[{\hat z\cat\aout\cat\ain}]\in\ssem{\proj{\clang}{}}$ that contradicts the third conjunct of (\ref{eq:negass}).
+%\qed
+
  
  \begin{example}
 In \cref{ex:simple2} we have seen that the two synchronous semantics differ on the \sclang 
