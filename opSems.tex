@@ -9,7 +9,7 @@
 \mkfun{\psynch}{ps}{}
 \newcommand{\gasem}[1]{\asem{#1}_{\mathbf{U}}}
 \newcommand{\commds}{\comm_{\!\mathsf{ds}}}
-
+ \newcommand{\sclang}{sc-language }
 
 
 
@@ -207,11 +207,8 @@ We define an operation filtering out in an word of action those actions  having 
 \label{fac:joinsplit}
 Let $\clang$ be a c-language, $\acword\in\clang$, $\aCS$ a communicating system on $\ptpset$, $\px\in\ptpset$, and let $z\in\alfact^\infty$ such that $\ssynch[z]$
 \begin{enumerate}[i)]
-%\item
-%$\join[{\ssplit[{\acword}]}] = \acword$
-%\item
-%$\ssplit[{\join[{z}]}] = z$
 \item
+\label{fac:joinsplit-a}
 $\filter{{\ssplit[{\acword}]}}{\px} = \proj{\acword}{X}$
 \item
 \label{fac:joinsplit-feqp}
@@ -248,7 +245,10 @@ of actions that correspond to possible runs in a system with asymmetric synchron
  
 
 \begin{definition}[Deferred synchronous words]
-Let $z\in\alfact^{\infty}$. We say $z$ to be a {\em deferred synchronous word} ($\dsynch[z]$) whenever both the following conditions hold
+Let $z\in\alfact^{\infty}$. We say $z$ to be a 
+\begin{enumerate}
+\item
+{\em (WEAK?) deferred synchronous word} ($\dsynch[z]$) whenever both the following conditions hold
 \begin{enumerate}[a)]
 \item 
 for each action $\aout$ in $z$, the first action after it of the form $\p\,\_!\_$ or  $\_\,\p?\_$ (if any) is $\ain$;
@@ -256,10 +256,21 @@ for each action $\aout$ in $z$, the first action after it of the form $\p\,\_!\_
 for each action $\ain$ in $z$, the first action preceding it of the form $\p\,\_!\_$ or  $\_\,\p?\_$ is $\aout$, and it is always the case.
 \end{enumerate}
 We define $DS=\Set{z\in\alfact^\infty \sst \dsynch[z]}$.
+\item
+ {\em strictly synchronous} $(\ssynch[z])$ whenever there exist $z'\in\alfact^{\infty}$ and 
+ $\acword\in\alfint^{\infty}$ such that 
+   $z'=\ssplit[w]$ and $z\commds z'$.\\
+   We define $SS=\Set{z\in\alfact^\infty \sst \ssynch[z]}$.
+\end{enumerate}
 \end{definition}
+
+
+
+
 
 The following definition of asymmetric semantics for a communicating system $\aCS$ corresponds
 to the possible runs (deferred synchronous words) of  $\aCS$.
+
 
 
 \begin{definition}[Unrestricted asymmetric synchronous semantics]
@@ -277,6 +288,32 @@ would contain also runs like
 $\aout[A][B][][m]\cat\ain[A][B][][m]^\omega$ or $\ain[A][B][]\cat\aout[A][B][][m]$, which are trivially nonsensical for the intended synchronous interactions.
 
 
+We now notice that, in presence of infinite computations and unless strong restrictions on systems are imposed, 
+equivalences of semantics would not be possible.
+Let us consider the system
+$\aCS = ({\alang}_{\px})_{\ptp[X] \in \Set{\p,\q, \ptp[C], \ptp[D]}}$ where
+$$\begin{array}{ll}
+\alang_{\p}= \pref[\Set{(\aout[A][B][][m])^\omega}] &
+\alang_{\q}= \pref{\Set{(\ain[A][B][][m])^\omega}}  \\[2mm]
+\alang_{\ptp[C]}= \Set{\emptyword, \aout[C][D][][m]} &
+\alang_{\ptp[D]}= \Set{\emptyword,\ain[C][D][][m]}
+\end{array}$$
+We have that 
+$\ssem{\aCS} = 
+\Set{(\gint[][A][m][B])^h\cat\gint[][C][m][D]\cat(\gint[][A][m][B])^k \sst h,k\geq 0}\cup\pref[\Set{(\gint[][A][m][B])^\infty}]$.
+Moreover, it is possible to check that 
+$z = \aout[A][B][][m]\cat\aout[C][D][][m]\cat\ain[A][B][][m]\cat(\aout[A][B][][m]\cat\ain[A][B][][m])^\omega\in\gasem{\aCS}$, where $z$ is maximal in $\gasem{\aCS}$ and  $\aout[C][D][][m]$ is unmatched in $z$.
+The presence of the unmatched $\aout[C][D][][m]$ in $z$ is however only due to the lack
+of fairness towards the participant $\ptp[D]$, since in the semantics it is also present
+a maximal $z'$ which correspond precisely to $z$ but for the presence of the matching
+action for the $\aout[C][D][][m]$. More precisely, we have
+that also  $z' = \aout[A][B][][m]\cat\aout[C][D][][m]\cat\ain[C][D][][m]\cat\ain[A][B][][m]\cat(\aout[A][B][][m]\cat\ain[A][B][][m])^\omega\in\gasem{\aCS}$.
+It is reasonable not to take into account, when checking the equivalence, words like $z$.
+
+
+
+
+
 The above unrestricted semantics could be, however, not comfortably handled.
 We then restrict it to a sound subset that safely \quo{represents} it. 
 The following observation is at the basis of what will shall use as the 
@@ -287,16 +324,6 @@ containing a number of output actions which have not been \quo{matched} yet by t
 input actions. It is not difficult to see that we can rearrange the actions of $z$ in a \quo{consistent} way, in order to obtain another word belonging to the semantics and of the form
 $\hat z\cat z'$, where $z'$ contains only the unmatched output and in $\hat z$ each
 output is immediately followed by the corresponding input.
-
-% belongs to the sematics of the system (i.e. $z'$ is a \quo{continuation} of $z$), 
-%we have that $\hat z \cat z'$ also belongs to the sematics, for any $\hat z$ where the unmatched
-%output actions appear in a consistent different order.
-%In particular, in $\hat z$, the unmatched output action can be taken into account only in the final 
-%part of $z$ 
-
-for each word w in the general semantics there is another word w' in the general semantics
-such that w' is synchronous.
-So we consider now a semantics modulo equivalence of words like w and w'.
 
 
 \begin{definition}[(prefix/strict) synchronous words]
@@ -335,11 +362,11 @@ Let be $\aCS$ a communicating system.
 \item
 Given $z\in \gasem{\aCS}$, there exists $z'\commds z$ such that $\psynch[z']$ and $z'\in \gasem{\aCS}$.
 \item
-$\gasem{\aCS}$ is $\comm$-closed.
+$\gasem{\aCS}$ is $\commds$-closed.
 \end{enumerate}
 \end{lemma}
  
-
+We can hence safely provide a more manageable definition of asymmetric synchronous semantics. 
 \begin{definition}[Asymmetric synchronous Semantics]\label{def:syncSem}
   Given a system $\aCS$ on $\ptpset$, the set
   \[
@@ -375,14 +402,14 @@ $\pref[{\ssplit[{\ssem{\aCS}}]}] \subseteq \asem{\aCS}$.
 
 \begin{example}
 \label{ex:simple2}
-The two semantics are non equivalent in general.
+The two semantics are trivially non equivalent in general on communicating systems.
 Let us consider $\aCS = ({\alang}_{\px})_{\ptp[X] \in \Set{\p,\q}}$ where\\
 \centerline{$\alang_{\p}= \Set{\aout[A][B][][m], \aout[A][B][][y]}$ \qquad $\alang_{\q}= \Set{\ain[A][B][][m]}$ }
 is clearly lock-free with the symmetric semantics and non lock-free with the asymmetric one.
 
- Even in case we restrict to systems
-obtained by projecting CUI c-languages the two semantics can differ.
-Let us consider the g-language $\clang$ in \cref{ex:simple}.
+ Even in case we consider systems
+obtained by projecting a CUI \sclang the two semantics can differ. 
+Let us consider the \sclang $\clang$ in \cref{ex:simple}.
 $\clang$ is CUI, hence we have 
   $$\ssem{\proj{\clang}{}} = \clang$$ 
 whereas 
@@ -390,7 +417,7 @@ whereas
 \finex
 \end{example} 
 
-\begin{definition}[Asymmetrically-synchronous correctness and completeness]\label{def:cc}
+\begin{definition}[Asymm-synchronous correctness and completeness]\label{def:cc}
   Let $\aCS$ be a communicating system and $\clang$ a g-language.\\
   $\aCS$ is \emph{a-synch correct (resp. complete) with respect to
     $\clang$} if $\join[{\asem{\aCS}}]\subseteq \clang$ (resp. 
@@ -406,7 +433,7 @@ A c-language $\clang$ on $\ptpset$ is CUIasym $(\cuuiasym[\clang])$ whenever,
 \end{definition}
 
 \begin{proposition}
-Let $\clang$ be a c-language.\\
+Let $\clang$ be a g-language.\\
 \centerline{$\cuuiasym[{\clang}]\ \implies\ \cuui[\clang]$}
 \end{proposition}
 \begin{proof}
@@ -423,59 +450,102 @@ prove $\cuui[\clang]$.
 
 \begin{theorem}[Equivalence of semantics]
 \label{th:eqsem}
- Let $\clang$ be a CUI c-language.
+ Let $\clang$ be a CUI \sclang\!.
 $$
 \cuuiasym[\clang] \quad \text{iff}\quad \asem{\proj{\clang}{}} =  \pref[{\ssplit[\ssem{\proj{\clang}{}}]}]\quad (=
  \pref[{\ssplit[\clang]}] \text{ by } \cuui)
 $$
 \end{theorem}
 \begin{proof}
+%
 ($\Leftarrow$).
-By contraposition, let us assume $\cuuiasym[\clang]$ not to hold. In that case, by \cref{def:cuiasym},
-since we have $\cuui[\clang]$, it has to be the case that
+%
+By contraposition, let us assume $\cuuiasym[\clang]$ not to hold. In that case, by \cref{def:cuiasym}, 
+it has to be the case that
 there exists $\p,\q\in\ptpset$ and $\acword, \acword_1\in\clang$ such that
- $$
+\begin{equation}
+\label{eq:lahyp}
  \proj{\acword}{A} = \proj{\acword_1}{A}\ \land\  \acword_1\cat\gint\in\clang\ \land\ \acword\cat\gint\not\in\clang
- $$
+ \end{equation}
  This necessarily implies $\acword_1\neq\acword$.
-We have now that
+We now observe that, by definition of projection, trivially,
  $\proj{(\acword_1\cat\gint)}{A}\in{\proj{\clang}{A}}$.
- So, using  \cref{fac:asymmsubsymm} and the above,
+ So, using  Fact \ref{fac:joinsplit}(\ref{fac:joinsplit-a}) and the above, we have that
  $\proj{(\acword_1\cat\gint)}{A}
 = \proj{\acword_1}{A}\cat\aout[A][B][][m]
 = \proj{\acword}{A}\cat\aout[A][B][][m]
  = \filter{(\ssplit[{\acword}])}{\p}\cat\aout[A][B][][m]
  = \filter{(\ssplit[{\acword}]\cat\aout[A][B][][m])}{\p}
  \in{\proj{\clang}{A}}$.
- Now, since, for each $\px\neq\p$ we have $\proj{({\acword})}{\px}=\filter{(\ssplit[{\acword}])}{\px}$,
- by definition of $\asem{\proj{\clang}{}}$ we get 
+ Now, by  definitions of projection, filtering and by Fact \ref{fac:joinsplit}(\ref{fac:joinsplit-a}) we have that, for each $\px\neq\p$, $\filter{(\ssplit[{\acword}]\cat\aout[A][B][][m])}{\px}=\filter{\ssplit[{\acword}]}{\px}=\proj{{\acword}}{\px}\in\proj{\clang}{X}$.
+So, by definition of $\asem{\proj{\clang}{}}$ and by observing that, trivially,
+$\psynch[{\ssplit[{\acword}]\cat\aout[A][B][][m]}]$, we get 
  $$\ssplit[{\acword}]\cat\aout[A][B][][m]\in\asem{\proj{\clang}{}}.$$
  In order to get the thesis it is then enough to show that 
  $$\ssplit[{\acword}]\cat\aout[A][B][][m] \not\in\pref[{\ssplit[\ssem{\proj{\clang}{}}]}].$$ 
  This means that we have to show that for no $u\in\alfact^\infty$ such that
  $\ssynch[{\ssplit[{\acword}]\cat\aout[A][B][][m]\cat u}]$
  we have $\join[{\ssplit[{\acword}]\cat\aout[A][B][][m]\cat u}]\in\ssem{\proj{\clang}{}}$. 
- If there were such an $u$, it should have necessarily the form $\ain[A][B][][m]\cat u'$.
- This, by prefix closure of $\ssem{\proj{\clang}{}}$ (=$\clang$), would imply
+ If there were such an $u$, it should have necessarily the form $u=\ain[A][B][][m]\cat u'$.
+ This, by prefix closure of $\ssem{\proj{\clang}{}}$, would imply
 $\join[{\ssplit[{\acword}]\cat\aout[A][B][][m]\cat \ain[A][B][][m]}]\in\ssem{\proj{\clang}{}}$,
 that is $\acword\cat\gint\in\ssem{\proj{\clang}{}}$ and hence, by $\cuui$,
-$\acword\cat\gint\in{{\clang}}$, contradicting our hypothesis.\\
+$\acword\cat\gint\in{{\clang}}$, contradicting the third conjunct of (\ref{eq:lahyp}).\\
 %
  ($\Rightarrow$).
+ %
  We assume $\cuuiasym$. Now, to show the thesis by contradiction, we assume 
+ $\asem{\proj{\clang}{}}$ not to be equivalent to $\ssem{\proj{\clang}{}}$.
+ In such a case, by \cref{fac:asymmsubsymm}( \ref{fac:asymmsubsymm-asubs}),
+ one of the two following possibilities can occur.
+ \begin{enumerate}[a)]
+ \item
+ There exits $z\in \asem{\proj{\clang}{}}$ such that $z\in \alfact^*$, $z$ is maximal in 
+ $\asem{\proj{\clang}{}}$ and $\neg\ssynch[z]$.
+ 
+ \end{enumerate}
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
  \begin{equation}
  \label{eq:aneqs}
  \asem{\proj{\clang}{}} \neq  \pref[{\ssplit[\ssem{\proj{\clang}{}}]}].
  \end{equation}
- Since, by \ref{fac:asymmsubsymm-asubs}(\ref{fac:asymmsubsymm}),
+ Since, by \cref{fac:asymmsubsymm}( \ref{fac:asymmsubsymm-asubs}),
  $\pref[{\ssplit[{\ssem{\proj{\clang}{}}}]}] \subseteq \asem{\proj{\clang}{}}$
- we have that  (\ref{eq:aneqs}) holds in case there exists $\hat z \in\alfact^*$ such that
+ we have that our assumption (\ref{eq:aneqs}) correspond to 
+ $\asem{\proj{\clang}{}}\not\subseteq \pref[{\ssplit[{\ssem{\proj{\clang}{}}}]}]$.
+ By \cref{fac:asymmsubsymm}(\ref{fac:asymmsubsymm-aimps}) this in turn corresponds to
+ asserting that the set 
+ $$
+ I = \Set{z\in\asem{\proj{\clang}{}} \sst \neg\ssynch[{z}] \land 
+ \forall \hat\acword\in\ssem{\proj{\clang}{}}.\ z\not\preceq \ssplit[{\hat w}]}$$
+ is non empty.
+ 
+ 
+ ==============================
+ 
+ 
+ This implies that, for certain $\hat z \in\alfact^*$ and $\p,\q,\msg[m]$, $z$ is of the form $z=\hat z\cat\aout$ and such that
  \begin{equation}
  \label{eq:negass}
- \ssynch[\hat z]\ \land\ \exists \p,\q,\msg[m].\  \hat z\cat\aout \in \asem{\proj{\clang}{}} \land\  \join[{\hat z\cat\aout\cat\ain}]\not\in\ssem{\proj{\clang}{}}
+% \exists \hat z \in\alfact^\infty \ssynch[\hat z]\ \land\ \exists \p,\q,\msg[m].\  \hat z\cat\aout \in \asem{\proj{\clang}{}} \land\  
+ \join[{\hat z\cat\aout\cat\ain}]\not\in\ssem{\proj{\clang}{}}
  \end{equation}
+ In fact, if we had  $\join[{\hat z\cat\aout\cat\ain}]\in\ssem{\proj{\clang}{}}$
+ we would also have $\join[{\hat z\cat\aout\cat\ain}]\in\ssem{\proj{\clang}{}}$
+ 
+ 
  By definition of $\asem{\proj{\clang}{}}$, 
-for each $\px\in\ptpof[\hat z\cat\aout]$  there is a $z_{\px}\in\proj{\clang}{X}\cap\alfact^*$ such that
+for each $\px\in\ptpof[\hat z\cat\aout]$  there is a $z_{\px}\in\proj{\clang}{X}$ such that
 $\filter{(\hat z\cat\aout)}{\px}=z_{\px}$. In particular, $z_{\p}= \filter{\hat z}{\p}\cat\aout$ and,
 for  $\px\neq\p$, $\filter{\hat z}{\px}=z_{\px}$.
 Now, by definition of projection,  for each $\px\in\ptpof[z]$ we can set $\acword_{\px}\in\clang$
@@ -514,7 +584,7 @@ This, as previously shown, would imply  $\join[{\hat z\cat\aout\cat\ain}]\in\sse
  \end{proof}
  
  \begin{example}
-In \cref{ex:simple2} we have seen that the two synchronous semantics differ on the g-language 
+In \cref{ex:simple2} we have seen that the two synchronous semantics differ on the \sclang 
 $\clang$ of \cref{ex:simple}.
 In fact it is possible to show that $\cuuiasym[{\clang}]$ does to hold.
 By taking $\acword_1=\gint[][A][m][D]$ and $\acword=\gint[][A][m][B]$, we have that
@@ -527,8 +597,8 @@ However $\gint[][A][m][B]\cat\cat\gint[][C][m][B]= \acword\cat\cat\gint[][C][m][
  It is easy to show that in the  characterization of \cref{th:eqsem}  one cannot get rid of the CUI hypothesis.
  In fact, for $\clang=\Set{\gint[][A][m][B], \gint[][C][m][D]}$, the two semantics are
  trivially equivalent on $\proj{\clang}{}$ and $\cuui[\clang]$ does not hold.
- In any case, a chracterisation of the equivalence for c-labguages that could be non CUI,
- would be hardly on any use.
+ In any case, a chracterisation of the equivalence for c-languages that could be non CUI,
+ would hardly be of any use.
  
 
  
