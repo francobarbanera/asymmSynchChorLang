@@ -520,9 +520,10 @@ $$
 %
 {\bf ($\Leftarrow$)}.
 %
-By contraposition, let us assume $\cuuiasym[\clang]$ not to hold. In that case, by \cref{def:cuiasym}, 
-it has to be the case that
-there exists $\p,\q\in\ptpset$ and $\acword, \acword_1\in\clang$ such that
+By contraposition, let us assume $\cuuiasym[\clang]$ not to hold. 
+By \cref{def:cuiasym}, we have hence to consider the following two cases.\\ 
+$\bullet$ 
+There exists $\p,\q\in\ptpset$ and $\acword, \acword_1\in\clang$ such that
 \begin{equation}
 \label{eq:lahyp}
  \proj{\acword}{A} = \proj{\acword_1}{A}\  \land\  \acword_1\cat\gint\in\clang\ \land\ \acword\cat\gint\not\in\clang
@@ -564,8 +565,14 @@ that is $\acword\cat\gint\in\ssem{\proj{\clang}{}}$ and hence, by $\cuui$,
 $\acword\cat\gint\in{{\clang}}$, contradicting the third conjunct of (\ref{eq:lahyp}).
 %
 \item
-$\ssplit[{\acword}]\cat\aout[A][B][][m]\cat u$ is infinite.\\ 
+$\ssplit[{\acword}]\cat\aout[A][B][][m]\cat u$ is infinite.....................\\ 
 \end{description}
+$\bullet$ There exists $\acword\in\clang$ such that \\
+$\acword\cat\gint\in\clang\ \land\ \acword\cat\gint[][B][n][C]\in\clang\   \land\
+ (\acword\cat\gint[][B][n][C]\cat\gint\not\in\clang\ \vee \acword\cat\gint\cat\gint[][B][n][C]\not\in\clang)$.
+ Without loss of generality, let us assume $\acword\cat\gint[][B][n][C]\cat\gint\not\in\clang$
+ be the case.
+Now, we have that $\acword\cat\aout[A][B][][m]\cat\aout[B][C][][m]\in\asem{\proj{\clang}{}}$...................\\
 %
  {\bf ($\Rightarrow$)}.
  %
