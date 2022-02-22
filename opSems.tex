@@ -572,7 +572,43 @@ $\acword\cat\gint\in\clang\ \land\ \acword\cat\gint[][B][n][C]\in\clang\   \land
  (\acword\cat\gint[][B][n][C]\cat\gint\not\in\clang\ \vee \acword\cat\gint\cat\gint[][B][n][C]\not\in\clang)$.
  Without loss of generality, let us assume $\acword\cat\gint[][B][n][C]\cat\gint\not\in\clang$
  be the case.
-Now, we have that $\acword\cat\aout[A][B][][m]\cat\aout[B][C][][m]\in\asem{\proj{\clang}{}}$...................\\
+Now, 
+we have that $\acword\cat\aout[A][B][][m]\cat\aout[B][C][][m]\in\asem{\proj{\clang}{}}$.
+Let us now take a generic maximal extension  of $\acword\cat\aout[A][B][][m]\cat\aout[B][C][][n]$
+in $\asem{\proj{\clang}{}}$, say  $\acword\cat\aout[A][B][][m]\cat\aout[B][C][][n]\cat u$. We distinguish between the two possible cases.
+\begin{description}
+\item
+$\acword\cat\aout[A][B][][m]\cat\aout[B][C][][n]\cat u$ is finite.\\
+By contradiction, let us assume $\sind[\proj{\clang}{}]$ to hold. 
+This implies $\ssynch[{\acword\cat\aout[A][B][][m]\cat\aout[B][C][][n]\cat u}]$.
+This means  $\acword\cat\aout[A][B][][m]\cat\aout[B][C][][n]\cat u$  to be actually
+eiher of the form  
+$$\acword\cat\aout[A][B][][m]\cat\aout[B][C][][n]\cat u_1\cat\ain[A][B][][m]\cat u_2\cat\ain[B][C][][n]\cat u_3$$
+or of the form
+$$\acword\cat\aout[A][B][][m]\cat\aout[B][C][][n]\cat u_1\cat\ain[B][C][][n]\cat u_2\cat\ain[A][B][][m]\cat u_3$$
+for suitables $u_1$, $u_2$ and $u_3$.
+
+We can consider the first case, since the second one is similar.
+We show now that actually  both
+$$\acword\cat\aout[A][B][][m]\cat\aout[B][C][][n]\cat u_1\cat\ain[A][B][][m]\cat u_2\cat\ain[B][C][][n]\cat u_3
+\commds 
+\acword\cat\aout[A][B][][m]\cat\ain[A][B][][m]\cat\aout[B][C][][n]\cat\ain[B][C][][n]\cat u_1\cat u_2\cat u_3$$
+and
+$$\acword\cat\aout[A][B][][m]\cat\aout[B][C][][n]\cat u_1\cat\ain[A][B][][m]\cat u_2\cat\ain[B][C][][n]\cat u_3
+\commds 
+\acword\cat\aout[B][C][][n]\cat\ain[B][C][][n]\cat\aout[A][B][][m]\cat\ain[A][B][][m]\cat u_1\cat u_2\cat u_3$$
+belongs to $\asem{\proj{\clang}{}}$, contradicting our hypothesis.
+In order to do that, we show that, if $u_1=u'_1\cat\aact$, 
+ $$
+ \acword\cat\aout[A][B][][m]\cat\aout[B][C][][n]\cat u_1\cat\ain[A][B][][m]\cat u_2\cat\ain[B][C][][n]\cat u_3
+ \commds
+ \acword\cat\aout[A][B][][m]\cat\aout[B][C][][n]\cat u'_1\cat\ain[A][B][][m]\cat\aact\cat u_2\cat\ain[B][C][][n]\cat u_3$$
+ [and similarly for $u_2$ with $\ain[B][C][][n]$]
+ 
+
+\end{description}
+
+
 %
  {\bf ($\Rightarrow$)}.
  %
