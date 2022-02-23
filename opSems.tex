@@ -489,6 +489,18 @@ $\proj{\acword}{A} = \proj{\acword_1}{A}\ \land\  \acword_1\cat\gint\in\clang\ \
  \item
  $\acword\cat\gint\in\clang\ \land\ \acword\cat\gint[][B][n][C]\in\clang\   \implies\
  \acword\cat\gint[][B][n][C]\cat\gint,\, \acword\cat\gint\cat\gint[][B][n][C]\in\clang$.
+ \item[ALT b)]
+  $\acword\cat\gint\in\clang\ \land\ \acword\cat\gint[][B][n][C]\in\clang\   \implies\ $
+  \begin{itemize}
+  \item
+  for each maximal extension $\acword'$ of $\acword\cat\gint$ there exists
+  $\acword\cat\gint\cat \acword'' \cat\gint[][B][n][C]\preceq \acword'$
+  such that $\p\not\in\ptpof[\acword'']$; and
+    \item
+  for each maximal extension $\acword'$ of $\acword\cat\gint[][B][n][C]$ there exists
+  $\acword\cat\gint[][B][n][C]\cat \acword'' \cat\gint\preceq \acword'$
+  such that $\q\not\in\ptpof[\acword'']$.
+  \end{itemize}
 \end{enumerate}
 \end{definition}
 
@@ -645,8 +657,7 @@ In order to do that, we show that, if $u_1=u'_1\cat\aact$,
  \item
  no sender in $o$ is $\ptp[B_n]$.
  \end{itemize}  
- Notice that, by Lemma YYY, also $z'$ is maximal in $\asem{\proj{\clang}{}}$.
- We distinguish now the two following possible cases.\\
+ Notice that, by Lemma YYY, also $z'$ is maximal in $\asem{\proj{\clang}{}}$.\\
  %
 %$\bullet$
 % ${\aout[B][C][][n]\not\in o}$ for no participant $\ptp[C]$ and message $\msg[n]$.(REMOVE?)\\
@@ -751,14 +762,15 @@ $\acword'_{\ptp[B_{i}]}\cat\gint[][B_i][m_{i+1}][B_{i+1}]\in\clang$   \qquad
 $\proj{\acword'_{\ptp[B_{i}]}}{B_i} = \proj{\acword}{B_i}$\quad 
 {\small (since $\proj{\acword'_{\ptp[B_{i}]}}{B}=\filter{\hat z}{\ptp[B_{i}]}=\proj{\join[\hat z]}{B_i}=\proj{\acword}{B}$) \quad ($0\leq i \leq n-1$) }
 \end{itemize} 
-So, by $\cuuiasym[\clang]$,  
+So, by $\cuuiasym[\clang]$,  [CONSIDER alternative CUIasym]
 $$\acword\cat\gint[][B_i][m_{i+1}][{B_{i+1}}]
 \in\clang$$
+for each $0\leq i \leq n-1$,
 and
-$$\acword\cat\gint[][B_i][m_{i+1}][{B_{i+1}}]\cat \gint[][{B_{i+1}}][m_{i}][B_i],\,%\cat\ldots \cat\gint[][B_{n-1}][m_{n}][B_{n}]
-\acword\cat \gint[][{B_{i+1}}][m_{i}][B_i]\cat\gint[][B_i][m_{i+1}][{B_{i+1}}]%\cat\ldots \cat\gint[][B_{n-1}][m_{n}][B_{n}]
+$$\acword\cat\gint[][B_{i-1}][m_{i}][{B_{i}}]\cat \gint[][{B_{i}}][m_{i-1}][B_{i-1}],\,%\cat\ldots \cat\gint[][B_{n-1}][m_{n}][B_{n}]
+\acword\cat \gint[][{B_{i}}][m_{i-1}][B_{i-1}]\cat\gint[][B_{i-1}][m_{i}][{B_{i}}]%\cat\ldots \cat\gint[][B_{n-1}][m_{n}][B_{n}]
 \in\clang$$
-for each $0\leq i \leq n-1$.
+for each $1\leq i \leq n$.
 
 We notice now that, since $\wsynch[z']$ holds, so does $\wsynch[{z'\cat\ain[B_{n-1}][B_n][][m_n] \cat\ain[B_{n-2}][B_{n-1}][][m_1]\ldots\cat\ain[B_0][B_1][][m_1]}]$. Moreover,
 \begin{itemize}
