@@ -328,20 +328,29 @@ A word $z\in\alfact^\infty$ is in synchronous form if any matched output is foll
 it corresponding input, with possibly some unmatched actions in between.
 
 \begin{lemma}
-Let $\aCS$ be a communicating system. Foer each $z\in\asem{\aCS}$ there exists
+Let $\aCS$ be a communicating system. For each $z\in\asem{\aCS}$ there exists
 $z'\in\asem{\aCS}$ such that $z'\commds$ and $z'$ is in synchronous form. 
 \end{lemma}
 
+\begin{lemma}
+\label{lem:finunm}
+In each infinite $z\in \asem{\proj{\clang}{}}$ there exist only a finite number of unmatched output
+actions in $z$. 
+\end{lemma}
+\begin{proof}[Sketch] Since $\wsynch[z]$ holds and
+there is a finite number of participants in $\aCS$.\qed
+\end{proof}
+
 \begin{definition}[Fair computations]
 Let $\aCS$ be a communicating system and let $z\in\alfint^\omega$ such that $z\in\asem{\aCS}$.
-Moreover, let $z_1, z_2\in\alfact^\infty$ be such that $z=z_1\cat z_2$ where $\unmatched[z_1]=\emptyset$
-(notice that $z_1$ exists since $\wsynch[z]$ holds and
-there is a finite number of participants in $\aCS$).
+Moreover, let $z_1, z_2\in\alfact^\infty$ be such that $z=z_1\cat z_2$ where $\unmatched[z_2]=\emptyset$
+(notice that $z_2$ exists by  \cref{lem:finunm}).
 We say that $z$ is {\em unfair} for $\aCS$ if there exists 
 $\aout\in\unmatched[z]$ such that\\
 \centerline{
 $\forall z_3.\quad (z_1\preceq z_3\prec z \land \unmatched[z_3]=\unmatched[z_1])  \implies z_3\cat\ain\in\asem{\aCS}$.} 
-We say that $z$ is {\em fair} if it is not unfair. 
+We say that $z$ is {\em fair} if it is not unfair. \\
+Finite elements of  $\asem{\aCS}$ are always fair.
 \end{definition}
 
 
@@ -349,20 +358,16 @@ We say that $z$ is {\em fair} if it is not unfair.
 \label{def:semind}
 Let $\aCS$ be a communicating system. We say that $\aCS$ is {\em (synchronous) semantics intependent}
  ($\sind[\aCS]$) whenever
-\begin{enumerate}[a)]
-\item
-for each finite  maximal $z\in \asem{\proj{\clang}{}}$, $\ssynch[z]$; and
-\item
-for each infinite and fair $z\in \asem{\proj{\clang}{}}$,  $z\in \ssem{\proj{\clang}{}}$.
-\end{enumerate}
+ $$\text{for each maximal and fair } z\in \asem{\proj{\clang}{}}:\  \ssynch[z]$$ 
+%\begin{enumerate}[a)]
+%\item
+%for each finite  maximal $z\in \asem{\proj{\clang}{}}$, $\ssynch[z]$; and
+%\item
+%for each infinite and fair $z\in \asem{\proj{\clang}{}}$,  $z\in \ssem{\proj{\clang}{}}$.
+%\end{enumerate}
 \end{definition}
 
-The above definition is justified by the following result.
 
-\begin{proposition}
-In each infinite $z\in \asem{\proj{\clang}{}}$ there exist only a finite number of unmatched output
-actions in $z$. 
-\end{proposition}
 
 
 
@@ -484,12 +489,22 @@ whereas
 A c-language $\clang$ on $\ptpset$ is CUIasym $(\cuuiasym[\clang])$ whenever,
  for each $\p,\q,\ptp[C]$,$\msg[m]$,$\msg[n]$, and each $\acword, \acword_1\in\clang$, the following holds:
  \begin{enumerate}[a)]
+ \item For no $\acword$ there exists $\acword\cat\gint[][A][m][B]$, $\acword\cat\gint[][B][n][C]$
+ and $\acword\cat\gint[][C][x][A]$. In general, a cycle. [Generalise for a cycle of arbitrary length].
   \item
+  \label{def:cuiasym-I}
+$\proj{\acword}{A} = \proj{\acword_1}{A}\ \land\  \acword_1\cat\gint\in\clang\ \implies\ \acword\cat\gint\in\clang$; and
+  \item[ALT b]
+\label{def:cuiasym-I}
+ there exists $\acword'$ such that 
+  $\acword\cat \acword'\cat\gint[][A][n][B]\cat\gint \in\clang$
+  where $\p\not\in\ptpof[\acword']$
+
 $\proj{\acword}{A} = \proj{\acword_1}{A}\ \land\  \acword_1\cat\gint\in\clang\ \implies\ \acword\cat\gint\in\clang$; and
  \item
  $\acword\cat\gint\in\clang\ \land\ \acword\cat\gint[][B][n][C]\in\clang\   \implies\
  \acword\cat\gint[][B][n][C]\cat\gint,\, \acword\cat\gint\cat\gint[][B][n][C]\in\clang$.
- \item[ALT b)]
+ \item[ALT c)]
   $\acword\cat\gint\in\clang\ \land\ \acword\cat\gint[][B][n][C]\in\clang\   \implies\ $
   \begin{itemize}
   \item
@@ -501,11 +516,11 @@ $\proj{\acword}{A} = \proj{\acword_1}{A}\ \land\  \acword_1\cat\gint\in\clang\ \
   $\acword\cat\gint[][B][n][C]\cat \acword'' \cat\gint\preceq \acword'$
   such that $\q\not\in\ptpof[\acword'']$.
   \end{itemize}
-   \item[ALT c)]
+   \item[ALT2 c)]
   $\acword\cat\gint\in\clang\ \land\ \acword\cat\gint[][B][n][C]\in\clang\   \implies\ $
-  there exists $\acword'$ such that 
-  $\acword\cat \acword'\cat\gint[][B][n][C]\cat\gint \in\clang$
-  where $\q\not\in\ptpof[\acword']$; 
+  there exist $\acword'$ and $\acword''$ such that 
+  $\acword\cat \acword'\cat\gint[][B][n][C]\cat\acword''\cat\gint \in\clang$
+  where $\p\not\in\ptpof[\acword'\cat\acword'']$ and $\q\not\in\ptpof[\acword']$,
 \end{enumerate}
 \end{definition}
 
@@ -541,10 +556,14 @@ By contraposition, let us assume $\cuuiasym[\clang]$ not to hold.
 By \cref{def:cuiasym}, we have hence to consider the following two cases.\\ 
 $\bullet$ 
 There exists $\p,\q\in\ptpset$ and $\acword, \acword_1\in\clang$ such that
-\begin{equation}
-\label{eq:lahyp}
- \proj{\acword}{A} = \proj{\acword_1}{A}\  \land\  \acword_1\cat\gint\in\clang\ \land\ \acword\cat\gint\not\in\clang
- \end{equation}
+\begin{itemize}
+\item
+$ \proj{\acword}{A} = \proj{\acword_1}{A}$
+\item
+$\acword_1\cat\gint\in\clang$
+\item
+ $\forall \acword'.\  \q\not\in\ptpof[\acword'] \implies \acword\cat\acword'\cat\gint\not\in\clang$.
+ \end{itemize}
  This necessarily implies $\acword_1\neq\acword$.
 We now observe that, by definition of projection, trivially,
  $\proj{(\acword_1\cat\gint)}{A}\in{\proj{\clang}{A}}$.
@@ -560,67 +579,109 @@ So, by definition of $\asem{\proj{\clang}{}}$ and by observing that, trivially,
 $\wsynch[{\ssplit[{\acword}]\cat\aout[A][B][][m]}]$, we get 
  $$\ssplit[{\acword}]\cat\aout[A][B][][m]\in\asem{\proj{\clang}{}}.$$
 By contradiction, let us assume $\sind[\clang]$ to hold.
-This implies that, since  $\neg\ssynch[{\ssplit[{\acword}]\cat\aout[A][B][][m]}]$,
-for each  $u\in\alfact^\infty$ such that $\ssplit[{\acword}]\cat\aout[A][B][][m]\cat u$
-is maximal in $\asem{\clang}$, the conditions of  \cref{def:semind} are satisfied.
-We distinguish between the two possible cases.
+This implies that, since  $\neg\ssynch[{\ssplit[{\acword}]\cat\aout[A][B][][m]}]$.
+We can hence  take a $u\in\alfact^\infty$ such that $\ssplit[{\acword}]\cat\aout[A][B][][m]\cat u$
+is maximal and fair in $\asem{\clang}$, for which then the condition of  \cref{def:semind} is satisfied,
+that is $\ssynch[{\ssplit[{\acword}]\cat\aout[A][B][][m]\cat u}]$.
+So, for suitable $u_1$ and $u_2$,  
+$$
+\ssplit[{\acword}]\cat\aout[A][B][][m]\cat u= \ssplit[{\acword}]\cat\aout[A][B][][m]\cat u_1\cat\ain[A][B][][m]\cat u_2$$
+Moreover, from $\wsynch[{\ssplit[{\acword}]\cat\aout[A][B][][m]\cat u_1\cat\ain[A][B][][m]\cat u_2}]$ we get that
+$\p\not\in\ptpof[u_1]$.
+Now, since it is possible to postpone an output till its corresponding input, we have that
+$$\ssplit[{\acword}]\cat\aout[A][B][][m]\cat u_1\cat\ain[A][B][][m]\cat u_2\commds \hat u$$
+ where 
+$$\hat u=\ssplit[{\acword\cat\acword_1\cat\gint[][A][m][B]\cat\acword_2}]$$ for suitable
+ $\acword_1,\acword_2\in\alfint^\infty$,
+  where $\p\not\in\ptpof[\acword_1]$, so contradicting  the third item of our assumption.
+ 
 %
+%We distinguish between the two possible cases.
+%%
+%\begin{description}
+%%
+%\item
+%$\ssplit[{\acword}]\cat\aout[A][B][][m]\cat u$ is finite.\\
+%%
+% \cref{def:semind} implies that, in such a case,   
+%
+%Such an $u'$ should have necessarily the form $u'=\ain[A][B][][m]\cat u''$.
+% This, together with prefix closure of $\asem{\proj{\clang}{}}$
+% and \cref{fac:asymmsubsymm}(\ref{fac:asymmsubsymm-aimps}), would imply
+%$\join[{\ssplit[{\acword}]\cat\aout[A][B][][m]\cat \ain[A][B][][m]}]\in\ssem{\proj{\clang}{}}$,
+%that is $\acword\cat\gint\in\ssem{\proj{\clang}{}}$ and hence, by $\cuui$,
+%$\acword\cat\gint\in{{\clang}}$, contradicting the third conjunct of (\ref{eq:lahyp}).
+%%
+%\item
+%$\ssplit[{\acword}]\cat\aout[A][B][][m]\cat u$ is infinite.....................\\ 
+%\end{description}
+$\bullet$ There exists $\acword\in\clang$ such that 
+\begin{itemize}
+\item
+$\acword\cat\gint\in\clang$
+\item
+$\acword\cat\gint[][B][n][C]\in\clang$
+\item
+$\forall \acword', \acword''.\  (\p\not\in\ptpof[\acword'\cat\acword''] \land \q\not\in\ptpof[\acword']) \implies \acword\cat\acword'\cat\gint[][B][n][C]\cat\acword''\cat\gint\not\in\clang$.
+ \end{itemize}
+Now, by definition of $\asem{\_}$
+we have that $\ssplit[\acword]\cat\aout[A][B][][m]\cat\aout[B][C][][m]\in\asem{\proj{\clang}{}}$.
+By contradiction, let us assume $\sind[\clang]$ to hold.
+Let us now take a generic fair and maximal extension  of $\ssplit[\acword]\cat\aout[A][B][][m]\cat\aout[B][C][][n]$
+in $\asem{\proj{\clang}{}}$, say  $\ssplit[\acword]\cat\aout[A][B][][m]\cat\aout[B][C][][n]\cat u$. We distinguish between the two possible cases.
 \begin{description}
-%
 \item
-$\ssplit[{\acword}]\cat\aout[A][B][][m]\cat u$ is finite.\\
-%
- \cref{def:semind} implies that, in such a case,   
- $\ssynch[{\ssplit[{\acword}]\cat\aout[A][B][][m]\cat u}]$ holds,
- that is there exists $u'$ such that
- $\ssplit[{\acword}]\cat\aout[A][B][][m]\cat u' \commds \ssplit[{\acword}]\cat\aout[A][B][][m]\cat u$ and $\ssplit[{\acword}]\cat\aout[A][B][][m]\cat u' = \ssplit[\acword']$ for some $\acword'\in\alfint^*$.
-Such an $u'$ should have necessarily the form $u'=\ain[A][B][][m]\cat u''$.
- This, together with prefix closure of $\asem{\proj{\clang}{}}$
- and \cref{fac:asymmsubsymm}(\ref{fac:asymmsubsymm-aimps}), would imply
-$\join[{\ssplit[{\acword}]\cat\aout[A][B][][m]\cat \ain[A][B][][m]}]\in\ssem{\proj{\clang}{}}$,
-that is $\acword\cat\gint\in\ssem{\proj{\clang}{}}$ and hence, by $\cuui$,
-$\acword\cat\gint\in{{\clang}}$, contradicting the third conjunct of (\ref{eq:lahyp}).
-%
-\item
-$\ssplit[{\acword}]\cat\aout[A][B][][m]\cat u$ is infinite.....................\\ 
-\end{description}
-$\bullet$ There exists $\acword\in\clang$ such that \\
-$\acword\cat\gint\in\clang\ \land\ \acword\cat\gint[][B][n][C]\in\clang\   \land\
- (\acword\cat\gint[][B][n][C]\cat\gint\not\in\clang\ \vee \acword\cat\gint\cat\gint[][B][n][C]\not\in\clang)$.
- Without loss of generality, let us assume $\acword\cat\gint[][B][n][C]\cat\gint\not\in\clang$
- be the case.
-Now, 
-we have that $\acword\cat\aout[A][B][][m]\cat\aout[B][C][][m]\in\asem{\proj{\clang}{}}$.
-Let us now take a generic maximal extension  of $\acword\cat\aout[A][B][][m]\cat\aout[B][C][][n]$
-in $\asem{\proj{\clang}{}}$, say  $\acword\cat\aout[A][B][][m]\cat\aout[B][C][][n]\cat u$. We distinguish between the two possible cases.
-\begin{description}
-\item
-$\acword\cat\aout[A][B][][m]\cat\aout[B][C][][n]\cat u$ is finite.\\
-By contradiction, let us assume $\sind[\proj{\clang}{}]$ to hold. 
-This implies $\ssynch[{\acword\cat\aout[A][B][][m]\cat\aout[B][C][][n]\cat u}]$.
-This means  $\acword\cat\aout[A][B][][m]\cat\aout[B][C][][n]\cat u$  to be actually
-eiher of the form  
-$$\acword\cat\aout[A][B][][m]\cat\aout[B][C][][n]\cat u_1\cat\ain[A][B][][m]\cat u_2\cat\ain[B][C][][n]\cat u_3$$
-or of the form
-$$\acword\cat\aout[A][B][][m]\cat\aout[B][C][][n]\cat u_1\cat\ain[B][C][][n]\cat u_2\cat\ain[A][B][][m]\cat u_3$$
+$\ssplit[\acword]\cat\aout[A][B][][m]\cat\aout[B][C][][n]\cat u$ is finite.\\
+Since we assumed $\sind[\proj{\clang}{}]$, we have that 
+$\ssynch[{\acword\cat\aout[A][B][][m]\cat\aout[B][C][][n]\cat u}]$.
+This means  $\ssplit[\acword]\cat\aout[A][B][][m]\cat\aout[B][C][][n]\cat u$  to be actually
+of the form  
+$$\ssplit[\acword]\cat\aout[A][B][][m]\cat\aout[B][C][][n]\cat u_1\cat\ain[B][C][][n]\cat u_2\cat\ain[A][B][][m]\cat u_3$$
 for suitables $u_1$, $u_2$ and $u_3$.
-
-We can consider the first case, since the second one is similar.
-We show now that actually  both
-$$\acword\cat\aout[A][B][][m]\cat\aout[B][C][][n]\cat u_1\cat\ain[A][B][][m]\cat u_2\cat\ain[B][C][][n]\cat u_3
-\commds 
-\acword\cat\aout[A][B][][m]\cat\ain[A][B][][m]\cat\aout[B][C][][n]\cat\ain[B][C][][n]\cat u_1\cat u_2\cat u_3$$
-and
-$$\acword\cat\aout[A][B][][m]\cat\aout[B][C][][n]\cat u_1\cat\ain[A][B][][m]\cat u_2\cat\ain[B][C][][n]\cat u_3
-\commds 
-\acword\cat\aout[B][C][][n]\cat\ain[B][C][][n]\cat\aout[A][B][][m]\cat\ain[A][B][][m]\cat u_1\cat u_2\cat u_3$$
-belongs to $\asem{\proj{\clang}{}}$, contradicting our hypothesis.
-In order to do that, we show that, if $u_1=u'_1\cat\aact$, 
+We remark that $\ssplit[\acword]\cat\aout[A][B][][m]\cat\aout[B][C][][n]\cat u$  cannot be
+of the form  $$\ssplit[\acword]\cat\aout[A][B][][m]\cat\aout[B][C][][n]\cat u_1\cat\ain[A][B][][m]\cat u_2\cat\ain[B][C][][n]\cat u_3$$
+because $\wsynch[{\ssplit[\acword]\cat\aout[A][B][][m]\cat\aout[B][C][][n]\cat u}]$ needs to hold.\\
+Moreover, from $\wsynch[{\ssplit[\acword]\cat\aout[A][B][][m]\cat\aout[B][C][][n]\cat u_1\cat\ain[B][C][][n]\cat u_2\cat\ain[A][B][][m]\cat u_3}]$ we get that
+$\p\not\in\ptpof[u_1\cat u_2]$ and $\q\not\in\ptpof[u_1]$.
+Now, since it is possible to postpone an output till its corresponding input, we have that
+$$\ssplit[\acword]\cat\aout[A][B][][m]\cat\aout[B][C][][n]\cat u_1\cat\ain[B][C][][n]\cat u_2\cat\ain[A][B][][m]\commds \hat u$$
+ where 
+$$\hat u=\ssplit[{\acword\cat\acword_1\cat\gint[][B][n][C]\cat\acword_2\cat\gint[][A][m][B]\cat\acword_3}]$$ for suitable
+ $\acword_1,\acword_2,\acword_3\in\alfint^\infty$,
+  where $\p\not\in\ptpof[\acword_1\cat\acword_2]$ and $\q\not\in\ptpof[\acword_1]$.
+ 
+ We have than that $\acword\cat\acword_1\cat\gint[][B][n][C]\cat\acword_2\cat\gint[][A][m][B]\in\clang$ and $\acword\cat\acword_1\cat\gint[][B][n][C]\cat\acword_2\in\clang$ and
+ $$\proj{\acword\cat\acword_1\cat\gint[][B][n][C]\cat\acword_2}{A}
+ =
+ \proj{\acword\cat\acword_1\cat\gint[][B][n][C]}{A}
  $$
- \acword\cat\aout[A][B][][m]\cat\aout[B][C][][n]\cat u_1\cat\ain[A][B][][m]\cat u_2\cat\ain[B][C][][n]\cat u_3
- \commds
- \acword\cat\aout[A][B][][m]\cat\aout[B][C][][n]\cat u'_1\cat\ain[A][B][][m]\cat\aact\cat u_2\cat\ain[B][C][][n]\cat u_3$$
- [and similarly for $u_2$ with $\ain[B][C][][n]$]
+ Since we are assuming condition (\ref{def:cuiasym-I}) of \cref{def:cuiasym}
+ (otherwise the first case would apply), we can infer that there exists $\acword''$ such that
+ $$\acword\cat\acword_1\cat\gint[][B][n][C]\cat\acword''\cat\gint[][A][m][B]\in\clang$$
+ where $\p\not\in\ptpof[\acword_1\cat\acword'']$ and $\q\not\in\ptpof[\acword_1]$, so contradicting the third item of our assumption.
+ 
+ 
+%
+% 
+% 
+% 
+%
+%We can consider the first case, since the second one is similar.
+%We show now that actually  both
+%$$\acword\cat\aout[A][B][][m]\cat\aout[B][C][][n]\cat u_1\cat\ain[A][B][][m]\cat u_2\cat\ain[B][C][][n]\cat u_3
+%\commds 
+%\acword\cat\aout[A][B][][m]\cat\ain[A][B][][m]\cat\aout[B][C][][n]\cat\ain[B][C][][n]\cat u_1\cat u_2\cat u_3$$
+%and
+%$$\acword\cat\aout[A][B][][m]\cat\aout[B][C][][n]\cat u_1\cat\ain[A][B][][m]\cat u_2\cat\ain[B][C][][n]\cat u_3
+%\commds 
+%\acword\cat\aout[B][C][][n]\cat\ain[B][C][][n]\cat\aout[A][B][][m]\cat\ain[A][B][][m]\cat u_1\cat u_2\cat u_3$$
+%belongs to $\asem{\proj{\clang}{}}$, contradicting our hypothesis.
+%In order to do that, we show that, if $u_1=u'_1\cat\aact$, 
+% $$
+% \acword\cat\aout[A][B][][m]\cat\aout[B][C][][n]\cat u_1\cat\ain[A][B][][m]\cat u_2\cat\ain[B][C][][n]\cat u_3
+% \commds
+% \acword\cat\aout[A][B][][m]\cat\aout[B][C][][n]\cat u'_1\cat\ain[A][B][][m]\cat\aact\cat u_2\cat\ain[B][C][][n]\cat u_3$$
+% [and similarly for $u_2$ with $\ain[B][C][][n]$]
  
 
 \end{description}
@@ -632,7 +693,36 @@ In order to do that, we show that, if $u_1=u'_1\cat\aact$,
  We assume $\cuuiasym$. Now, to show the thesis by contradiction, we assume 
  $\asem{\proj{\clang}{}}$ not to be equivalent to $\ssem{\proj{\clang}{}}$.
  In such a case, by \cref{fac:asymmsubsymm}( \ref{fac:asymmsubsymm-asubs}),
- one of the two following possibilities can occur.
+two following holds.
+\begin{quote}
+There exists a maximal and fair $z\in \asem{\proj{\clang}{}}$ such that  $\neg\ssynch[z]$.
+\end{quote}
+
+ By Lemma XXX, since $\neg\ssynch[z]$ and $\wsynch[z]$, and we assumed $\cuuiasym$, there exists 
+ $z'\in\asem{\proj{\clang}{}}$ such that 
+ $$z\commds z' = \hat z \cat\aout[B_0][B_1][][m_1]\cat\aout[B_1][B_2][][m_2]\ldots\cat\aout[B_{n-1}][B_n][][m_n]\cat o$$
+  where
+  \begin{itemize}
+  \item
+ $\hat z = \ssplit[\acword]$ for a certain $\acword\in\alfint^*$; and 
+ \item 
+ $\aout[B_0][B_1][][m_1]\cat\aout[B_1][B_2][][m_2]\ldots\cat\aout[B_{n-1}][B_n][][m_n]\cat o$ is the sequence
+ of the unmatched 
+ output action in $z$; and
+ \item
+ no sender in $o$ belongs to $\Set{\ptp[B_i] \sst 0\leq i \leq n}$; and
+ \item
+ $\Set{\aout[D_j][B_n][][n_J] \sst 0\leq i \leq k}$ is the set of actions in $o$ having $\ptp[B_n]$ 
+ as receiver. 
+ \end{itemize}  
+ Notice that, by Lemma YYY, also $z'$ is maximal in $\asem{\proj{\clang}{}}$.\\
+
+
+
+
+
+===========================
+
  \begin{enumerate}[a)]
  \item
  \label{lab:finite}
@@ -656,8 +746,8 @@ In order to do that, we show that, if $u_1=u'_1\cat\aact$,
   \item
  $\hat z = \ssplit[\acword]$ for a certain $\acword\in\alfint^*$; and 
  \item 
- $\aout[B_0][B_1][][m_1]\cat\aout[B_1][B_2][][m_2]\ldots\cat\aout[B_{n-1}][B_n][][m_n]\cat o$ is a sequence
- of unmatched 
+ $\aout[B_0][B_1][][m_1]\cat\aout[B_1][B_2][][m_2]\ldots\cat\aout[B_{n-1}][B_n][][m_n]\cat o$ is the sequence
+ of the unmatched 
  output action in $z$; and
  \item
  no sender in $o$ is $\ptp[B_n]$.
