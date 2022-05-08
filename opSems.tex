@@ -368,15 +368,10 @@ Let $\aCS$ be a communicating system. We say that $\aCS$ is {\em (synchronous) s
 \end{definition}
 
 
-
-
-
-
-
-The above unrestricted semantics could be, however, not comfortably handled.
-We then restrict it to a sound subset that safely \quo{represents} it. 
-The following observation is at the basis of what will shall use as the 
-actual asymmetric synchronous semantics (\cref{def:syncSem} below)
+%The above unrestricted semantics could be, however, not comfortably handled.
+%We then restrict it to a sound subset that safely \quo{represents} it. 
+%The following observation is at the basis of what will shall use as the 
+%actual asymmetric synchronous semantics (\cref{def:syncSem} below)
 
 Let us consider a generic trace $z$ of a system with asymmetric synchronous communication possibly
 containing a number of output actions which have not been \quo{matched} yet by their corresponding
@@ -691,7 +686,7 @@ of the two following conditions.
  \begin{description}
  \item[ \ref{lab:finite})]
  %
- By Lemma XXX, since $\neg\ssynch[z]$ and $\psynch[z]$ there exists 
+ By Lemma XXX, since $\neg\ssynch[z]$ and $\wsynch[z]$ there exists 
  $z'\in\asem{\proj{\clang}{}}$ such that 
  $$z\commds z' = \hat z \cat\aout[B_0][B_1][][m_1]\cat\aout[B_1][B_2][][m_2]\ldots\cat\aout[B_{n-1}][B_n][][m_n]\cat o$$
   where
